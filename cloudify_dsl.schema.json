@@ -937,31 +937,31 @@
       "properties": {
           "install_method": {
             "description": "Specifies how (and if) the cloudify agent should be installed.\nValid values are:\n* none - No agent will be installed on the host.\n* remote - An agent will be installed using SSH on linux hosts and WinRM on windows hosts.\n* init_script - An agent will be installed via a script that will run on the host when it gets created.\n                This method is only supported for specific IaaS plugins.\n* plugin - An agent will be installed via a plugin which will run a script on the host.\n          This method is only supported for specific IaaS plugins.\n* provided - An agent is assumed to already be installed on the host image.\n            That agent will be configured and started via a script that will run on the host when it gets created.\n            This method is only supported for specific IaaS plugins.",
-            "type": "string"
+            "$ref": "#/definitions/cloudifyStringOrGetInput"
           },
           "service_name": {
             "description": "Used to set the the cloudify agent service name.\n\nIf not set, the default value for the service name is:\n- Linux: 'cloudify-worker-<id>'\n- Windows: '<id>'\n\nwhere 'id' is the instance id of the compute node in which the agent is running.\n\nNote: the value in this field, takes precedence over the deprecated\n'cloudify.nodes.Compute.cloudify_agent.name'.",
-            "type": "string"
+            "$ref": "#/definitions/cloudifyStringOrGetInput"
           },
           "network": {
             "description": "The name of the manager network to which the agent should be\nconnected. By default, the value will be `default` (which is the\nmanager's private IP, by default)",
-            "type": "string"
+            "$ref": "#/definitions/cloudifyStringOrGetInput"
           },
           "user": {
             "description": "For host agents, the agent will be installed for this user.",
-            "type": "string"
+            "$ref": "#/definitions/cloudifyStringOrGetInput"
           },
           "key": {
             "description": "For host agents that are installed via SSH, this is the path to the private\nkey that will be used to connect to the host.\nIn most cases, this value will be derived automatically during bootstrap.",
-            "type": "string"
+            "$ref": "#/definitions/cloudifyStringOrGetInput"
           },
           "password": {
             "description": "For host agents that are installed via SSH (on linux) and WinRM (on windows)\nthis property can be used to connect to the host.\nFor linux hosts, this property is optional in case the key property is properly configured\n(either explicitly or implicitly during bootstrap).\nFor windows hosts that are installed via WinRM, this property is also optional\nand depends on whether the password runtime property has been set by the relevant IaaS plugin,\nprior to the agent installation.",
-            "type": "string"
+            "$ref": "#/definitions/cloudifyStringOrGetInput"
           },
           "port": {
             "description": "For host agents that are installed via SSH (on linux) and WinRM (on windows),\nthis is the port used to connect to the host.\nThe default values are 22 for linux hosts and 5985 for windows hosts.",
-            "type": "integer"
+            "$ref": "#/definitions/cloudifyIntegerOrGetInput"
           },
           "process_management": {
             "description": "Process management specific configuration. (type: dictionary)",
@@ -969,22 +969,22 @@
           },
           "min_workers": {
             "description": "Minimum number of agent workers. By default, the value will be 0.\nNote: For windows based agents, this property is ignored and min_workers is set to the value of max_workers.",
-            "type": "integer"
+            "$ref": "#/definitions/cloudifyIntegerOrGetInput"
           },
           "max_workers": {
             "description": "Maximum number of agent workers. By default, the value will be 5.",
-            "type": "integer"
+            "$ref": "#/definitions/cloudifyIntegerOrGetInput"
           },
           "heartbeat": {
             "description": "The interval of the AMQP heartbeats in seconds\nNote: the AMQP heartbeat is only used on Linux.",
-            "type": "object"
+            "$ref": "#/definitions/cloudifyIntegerOrGetInput"
           },
           "disable_requiretty": {
             "description": "For linux based agents, disables the requiretty setting in the sudoers file. By default, this value will be true.",
-            "type": "boolean"
+            "$ref": "#/definitions/cloudifyBooleanOrGetInput"
           },
           "env": {
-            "description": "Optional environment variables that the agent will be started with. (type: dictionary)",
+            "description": "Optional environment variables that the agent will be started with. (type: dictionary)"
           },
           "extra": {
             "description": "Optional additional low level configuration details. (type: dictionary)",
@@ -997,7 +997,7 @@
       "type": "object",
       "properties": {
         "use_external_resource": {
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
           "description": "Indicate whether the resource exists or if Cloudify should create the resource, true if you are bringing an existing resource, false if you want cloudify to create it.",
           "default": false
         }
@@ -1007,7 +1007,7 @@
       "type": "object",
       "properties": {
         "create_if_missing": {
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
           "description": "If use_external_resource is ``true`` and the resource is missing,create it instead of failing.",
           "default": false
         }
@@ -1017,44 +1017,44 @@
       "type": "object",
       "properties": {
         "auth_url": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Your OpenStack Client Authorization URL."
         },
         "username": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Your OpenStack username."
         },
         "password": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Your OpenStack password."
         },
         "project_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "The name of your OpenStack project."
         },
         "tenant_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "The name of your OpenStack tenant."
         },
         "region_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "The region where you want this particular resource to be created."
         },
         "user_domain_id": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "The user domain id"
         },
         "project_domain_id": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "The Project domain id"
         },
         "user_domain_name": {
           "description": "Domain name to operate on.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "project_domain_name": {
           "description": "Project domain name to operate on.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "logging": {
           "description": "Logging configuration.",
@@ -1062,12 +1062,12 @@
         },
         "insecure": {
           "description": "If true, SSL validation is skipped.",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
           "default": false
         },
         "ca_cert": {
           "description": "Path to CA certificate to validate OpenStack's endpoint with.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "kwargs": {
           "description": "A dictionary of keys and values that is not validated\nbut will override other values in the client config.",
@@ -1080,7 +1080,7 @@
       "properties": {
         "openstack": {
           "description": "Default logging level for openstack component.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         }
       }
     },
@@ -1107,7 +1107,7 @@
       "properties": {
         "name": {
           "description": "Resource name.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         }
       }
     },
@@ -1116,7 +1116,7 @@
       "properties": {
         "id": {
           "description": "Resource id",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         }
       }
     },
@@ -1124,7 +1124,7 @@
       "type": "object",
       "properties": {
         "description": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Resource description."
         }
       }
@@ -1138,7 +1138,7 @@
         {
           "properties": {
             "admin_state_up": {
-              "type": "boolean",
+              "$ref": "#/definitions/cloudifyBooleanOrGetInput",
               "description": "The administrative state of the network, which is up (true) or down (false).",
               "default": true
             }
@@ -1156,11 +1156,11 @@
           "properties": {
             "enable_dhcp": {
               "description": "Indicates whether dhcp is enabled or disabled for the subnet. Default is true.",
-              "type": "boolean"
+              "$ref": "#/definitions/cloudifyBooleanOrGetInput"
             },
             "network_id": {
               "description": "The ID of the network to which the subnet belongs.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "dns_nameservers": {
               "description": "List of dns name servers associated with the subnet. Default is an empty list.",
@@ -1179,27 +1179,27 @@
             },
             "ip_version": {
               "description": "The IP protocol version. Value is 4 or 6.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "gateway_ip": {
               "description": "Gateway IP of this subnet. If the value is null that implies no gateway is associated with the subnet. If the gateway_ip is not specified, OpenStack Networking allocates an address from the CIDR for the gateway for the subnet by default.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "cidr": {
               "description": "The CIDR of the subnet.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "prefixlen": {
               "description": "The prefix length to use for subnet allocation from a subnet pool. If not specified, the default_prefixlen value of the subnet pool will be used.",
-              "type": "integer"
+              "$ref": "#/definitions/cloudifyIntegerOrGetInput"
             },
             "ipv6_address_mode": {
               "description": "The IPv6 address modes specifies mechanisms for assigning IP addresses. Value is slaac, dhcpv6-stateful, dhcpv6-stateless.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "ipv6_ra_mode": {
               "description": "The IPv6 router advertisement specifies whether the networking service should transmit ICMPv6 packets, for a subnet. Value is slaac, dhcpv6-stateful, dhcpv6-stateless.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             }
           }
         }
@@ -1220,20 +1220,20 @@
             },
             "device_id": {
               "description": "The ID of the device that uses this port. For example, a server instance or a logical router.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "device_owner": {
               "description": "The entity type that uses this port. For example, compute:nova (server instance), network:dhcp (DHCP agent) or network:router_interface (router interface).",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "fixed_ips": {
               "description": "list.\nThe IP addresses for the port. If you would like to assign multiple IP addresses for the port, specify multiple entries in this field. Each entry consists of IP address (ip_address) and the subnet ID from which the IP address is assigned (subnet_id).\n- If you specify both a subnet ID and an IP address, OpenStack Networking tries to allocate the IP address on that subnet to the port.\n- If you specify only a subnet ID, OpenStack Networking allocates an available IP from that subnet to the port.\n- If you specify only an IP address, OpenStack Networking tries to allocate the IP address if the address is a valid IP for any of the subnets on the specified network.",
               "type": "array",
-              "items": {"type": "string"},
+              "items": {"type": "string"}
             },
             "network_id": {
               "description": "The ID of the network to which the subnet belongs.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "security_groups": {
               "description": "list. The IDs of security groups applied to the port.",
@@ -1262,35 +1262,35 @@
           "properties": {
             "floating_network_id": {
               "description": "The ID of the network associated with the floating IP.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "floating_network_name": {
               "description": "The Name of the network associated with the floating IP.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "fixed_ip_address": {
               "description": "The fixed IP address that is associated with the floating IP. If an internal port has multiple associated IP addresses, the service chooses the first IP address unless you explicitly define a fixed IP address in the fixed_ip_address parameter.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "floating_ip_address": {
               "description": "The floating IP address.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "port_id": {
               "description": "The ID of a port associated with the floating IP. To associate the floating IP with a fixed IP at creation time, you must specify the identifier of the internal port.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "subnet_id": {
               "description": "The subnet ID on which you want to create the floating IP.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "dns_domain": {
               "description": "A valid DNS domain.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "dns_name": {
               "description": "A valid DNS name.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             }
           }
         }
@@ -1314,31 +1314,31 @@
           "properties": {
             "remote_group_id": {
               "description": "The remote group UUID to associate with this security group rule. You can specify either the remote_group_id or remote_ip_prefix attribute in the request body.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "protocol": {
               "description": "The IP protocol of the security group rule.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "direction": {
               "description": "Ingress or egress, which is the direction in which the security group rule is applied.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "port_range_min": {
               "description":" The minimum port number in the range that is matched by the security group rule. If the protocol is TCP, UDP, DCCP, SCTP or UDP-Lite this value must be less than or equal to the port_range_max attribute value. If the protocol is ICMP, this value must be an ICMP type.",
-              "type": "integer"
+              "$ref": "#/definitions/cloudifyIntegerOrGetInput"
             },
             "port_range_max": {
               "description": "The maximum port number in the range that is matched by the security group rule. If the protocol is TCP, UDP, DCCP, SCTP or UDP-Lite this value must be greater than or equal to the port_range_min attribute value. If the protocol is ICMP, this value must be an ICMP type.",
-              "type": "integer"
+              "$ref": "#/definitions/cloudifyIntegerOrGetInput"
             },
             "security_group_id": {
               "description": "The security group ID to associate with this security group rule.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "remote_ip_prefix": {
               "description": "The remote IP prefix that is matched by this security group rule.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             }
           }
         }
@@ -1354,7 +1354,7 @@
           "properties": {
             "public_key": {
               "description": "The public ssh key to import. If you omit this value,\na keypair is generated for you",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             }
           }
         }
@@ -1368,7 +1368,7 @@
         {
           "properties": {
             "availability_zone": {
-              "type": "string",
+              "$ref": "#/definitions/cloudifyStringOrGetInput",
               "description": "The name of the host aggregate."
             }
           }
@@ -1385,11 +1385,11 @@
           "properties": {
             "container_format": {
               "description": "Format of the image container.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "disk_format": {
               "description": "The format of the disk.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "tags": {
               "description": "List of tags for this image. Each tag is a string of at most 255 chars.\nThe maximum number of tags allowed on an image is set by the operator.",
@@ -1410,15 +1410,15 @@
           "properties": {
             "ram": {
               "description": "The amount of RAM a flavor has, in MiB",
-              "type": "integer"
+              "$ref": "#/definitions/cloudifyIntegerOrGetInput"
             },
             "disk": {
               "description": "The size of the root disk that will be created in GiB.\nIf 0 the root disk will be set to exactly the size of the image used\nto deploy the instance. However, in this case filter scheduler cannot\nselect the compute host based on the virtual image size.\nTherefore, 0 should only be used for volume booted instances or for testing purposes.",
-              "type": "integer"
+              "$ref": "#/definitions/cloudifyIntegerOrGetInput"
             },
             "vcpus": {
               "description": "The number of virtual CPUs that will be allocated to the server.",
-              "type": "integer"
+              "$ref": "#/definitions/cloudifyIntegerOrGetInput"
             }
           }
         }
@@ -1434,23 +1434,23 @@
           "properties": {
             "default_project_id": {
               "description": "The ID of the default project for the user.\nA user's default project must not be a domain.\nSetting this attribute does not grant any actual authorization\non the project, and is merely provided for convenience.\nTherefore, the referenced project does not need to exist within the user domain. Since v3.1.\nIf the user does not have authorization to their default project,\nthe default project is ignored at token creation. Since v3.1.\nAdditionally, if your default project is not valid, a token is issued without an explicit scope of authorization",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "domain_id": {
               "description": "The ID of the domain of the user. If the domain ID is not provided\nin the request, the Identity service will attempt to pull the\ndomain ID from the token used in the request.Note that this requires the use of a domain-scoped token.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "enabled": {
               "description": "If the user is enabled, this value is true. If the user is disabled, this value is false",
-              "type": "boolean"
+              "$ref": "#/definitions/cloudifyBooleanOrGetInput"
             },
             "password": {
               "description": "The password for the user.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "email": {
               "description": "The email for the user.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             }
           }
         }
@@ -1467,7 +1467,7 @@
           "properties": {
             "domain_id": {
               "description": "The ID of the domain of the group. If the domain ID is not provided\nin the request, the Identity service will attempt to pull the\ndomain ID from the token used in the request.Note that this requires the use of a domain-scoped token.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             }
           }
         }
@@ -1484,7 +1484,7 @@
           "properties": {
             "domain_id": {
               "description": "The ID of the domain of the role. If the domain ID is not provided\nin the request, the Identity service will attempt to pull the\ndomain ID from the token used in the request.Note that this requires the use of a domain-scoped token.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             }
           }
         }
@@ -1501,15 +1501,15 @@
           "properties": {
             "is_domain": {
               "description": "Indicates whether the project also acts as a domain.\nIf set to true, this project acts as both a project and domain.",
-              "type": "boolean"
+              "$ref": "#/definitions/cloudifyBooleanOrGetInput"
             },
             "domain_id": {
               "description": "The ID of the domain for the project.\nFor projects acting as a domain, the domain_id must not be specified, it will be generated by the Identity service implementation.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "parent_id": {
               "description": "The ID of the parent of the project..",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "tags": {
               "description": "A list of simple strings assigned to a project. Tags can be used to classify projects into groups.",
@@ -1531,27 +1531,27 @@
           "properties": {
             "project_id": {
               "description": "The UUID of the project in a multi-tenancy cloud.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "size": {
               "description": "The size of the volume, in gibibytes (GiB).",
-              "type": "integer"
+              "$ref": "#/definitions/cloudifyIntegerOrGetInput"
             },
             "availability_zone": {
               "description": "The name of the availability zone.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "imageRef": {
               "description": "The UUID of the image from which you want to create the volume.\nRequired to create a bootable volume.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "snapshot_id": {
               "description": "To create a volume from an existing snapshot,\nspecify the UUID of the volume snapshot.\nThe volume is created in same availability zone and with same size as the snapshot.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "volume_type": {
               "description": "The volume type (either name or ID).\nTo create an environment with multiple-storage back ends, you\nmust specify a volume type. Block Storage volume back ends are\nspawned as children to cinder- volume, and they are keyed from a\nunique queue. They are named cinder- volume.HOST.BACKEND. For\nexample, cinder- volume.ubuntu.lvmdriver. When a volume is\ncreated, the scheduler chooses an appropriate back end to handle\nthe request based on the volume type. Default is None. For\ninformation about how to use volume types to create multiple-\nstorage back ends,",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             }
           }
         }
@@ -1568,7 +1568,7 @@
           "properties": {
             "project_id": {
               "description": "The UUID of the project in a multi-tenancy cloud..",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "extra_specs": {
               "description": "A key and value pair that contains additional specifications\nthat are associated with the volume type.\nExamples include capabilities, capacity, compression,\nand so on, depending on the storage driver in use.",
@@ -1588,19 +1588,19 @@
           "properties": {
             "ttl": {
               "description": "TTL (Time to Live) for the zone.",
-              "type": "integer"
+              "$ref": "#/definitions/cloudifyIntegerOrGetInput"
             },
             "email": {
               "description": "e-mail for the zone. Used in SOA records for the zone",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "type": {
               "description": "Type of zone. PRIMARY is controlled by Designate,\nSECONDARY zones are slaved from another DNS Server.\nDefaults to PRIMARY",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "masters": {
               "description": "Mandatory for secondary zones.\nThe servers to slave from to get DNS information",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "attributes": {
               "description": "Key:Value pairs of information about this zone,nand the pool the user would like to place the zone in.\nThis information can be used by the scheduler to placenzones on the correct pool.",
@@ -1620,15 +1620,15 @@
           "properties": {
             "ttl": {
               "description": "TTL (Time to Live) for the recordset.",
-              "type": "integer"
+              "$ref": "#/definitions/cloudifyIntegerOrGetInput"
             },
             "zone_id": {
               "description": "ID for the zone",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "type": {
               "description": "They RRTYPE of the recordset.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "records": {
               "description": "A list of data for this recordset.\nEach item will be a separate record in Designate\nThese items should conform to the DNS spec for\nthe record type - e.g. A records must be IPv4 addresses,\nCNAME records must be a hostname.",
@@ -1803,7 +1803,7 @@
                 }
               }
             }
-          },
+          }
         },
         "cloudify.interfaces.operations": {
           "type": "object",
@@ -1851,7 +1851,7 @@
         {
           "properties": {
             "fixed_ip": {
-              "type": "string",
+              "$ref": "#/definitions/cloudifyStringOrGetInput",
               "description": "may be used to request a specific fixed IP for the port.\nIf the IP is unavailable\n(either already taken or does not belong to a subnet the port is on)\nan error will be raised."
             },
             "resource_config": {
@@ -1954,7 +1954,7 @@
               "description": "A dictionary that may contain these keys https://developer.openstack.org/api-ref/network/v2/#create-router."
             },
             "external_network": {
-              "type": "string",
+              "$ref": "#/definitions/cloudifyStringOrGetInput",
               "description": "An external network name or ID.\nIf given, the router will use this external network as a gateway."
             }
           },
@@ -2072,7 +2072,7 @@
         {
           "properties": {
             "allow_reallocation": {
-              "type": "boolean",
+              "$ref": "#/definitions/cloudifyBooleanOrGetInput",
               "default": false,
               "description": "(Applicable only when use_external_resource is true)\nIf true, then allow using this floating IP even if it has already been allocated to\nanother instance. If false, and the floating IP is already allocated (that is, it is\nin 'ACTIVE' state), a recoverable error is raised."
             },
@@ -2172,7 +2172,7 @@
           "properties": {
             "disable_default_egress_rules": {
               "description": "a flag for removing the default rules. If not set to `true`,\nthese rules will remain, and exist alongside any additional rules passed using the `rules` property.",
-              "type": "boolean"
+              "$ref": "#/definitions/cloudifyBooleanOrGetInput"
             },
             "security_group_rules": {
               "description": "List of security groups rule.",
@@ -2377,19 +2377,19 @@
           "properties": {
             "target_tenant": {
               "description": "The ID of the tenant to which the RBAC policy will be enforced.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "object_type": {
               "description": "The type of the object that the RBAC policy affects.\nTypes include qos-policy or network.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "object_id": {
               "description": "The ID of the object_type resource. An object_type of\nnetwork returns a network ID and an object_type of qos-policy returns a QoS ID.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "action": {
               "description": "Action for the RBAC policy which is access_as_external or access_as_shared.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             }
           }
         }
@@ -2406,19 +2406,19 @@
           "properties": {
             "image_id": {
               "description": "The UUID of the image to use for your server instance.\nThis is not required in case of boot from volume.\nIn all other cases it is required\nand must be a valid UUID otherwise API will return 400",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "flavor_id": {
               "description": "The flavor reference, as an ID (including a UUID) or\nfull URL, for the flavor for your server instance.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "availability_zone": {
               "description": "The availability zone from which to launch the server.\nWhen you provision resources, you specify from which availability\nzone you want your instance to be built. Typically,\nan admin user will use availability zones to arrange\nOpenStack compute hosts into logical groups.\nAn availability zone provides a form of physical isolation\nand redundancy from other availability zones.\nFor instance, if some racks in your data center are\non a separate power source, you can put servers in those racks\nin their own availability zone. Availability zones can\nalso help separate different classes of hardware.\nBy segregating resources into availability zones,\nyou can ensure that your application resources are spread across\ndisparate machines to achieve high availability\nin the event of hardware or other failure.\nYou can list the available availability zones\nby calling the os-availability-zone API,\nbut you should avoid using the default availability zone when\nbooting the instance. In general,\nthe default availability zone is named nova.\nThis AZ is only shown when listing the availability zones as an admin",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "user_data": {
               "description": "Configuration information or scripts to use upon launch.\nMust be Base64 encoded. Restricted to 65535 bytes.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             },
             "metadata": {
               "description": "Metadata key and value pairs.\nThe maximum size of the metadata key and value is 255 bytes each.",
@@ -2436,7 +2436,7 @@
             },
             "key_name": {
               "description": "Key pair name.",
-              "type": "string"
+              "$ref": "#/definitions/cloudifyStringOrGetInput"
             }
           }
         }
@@ -2449,7 +2449,7 @@
         {
           "properties": {
             "os_family": {
-              "type": "string",
+              "$ref": "#/definitions/cloudifyStringOrGetInput",
               "default": "windows",
               "description": "updates the os_family default as a convenience"
             },
@@ -2473,7 +2473,7 @@
         {
           "properties": {
             "resource_config": {
-              "$ref": "openstackTypesKeyPair",
+              "$ref": "#/definitions/openstackTypesKeyPair",
               "description": "https://developer.openstack.org/api-ref/compute/?expanded=create-or-import-keypair-detail"
             }
           },
@@ -2680,7 +2680,7 @@
         {
           "properties": {
             "image_url": {
-              "type": "string",
+              "$ref": "#/definitions/cloudifyStringOrGetInput",
               "description": "The openstack resource URL for the image."
             },
             "resource_config": {
@@ -3286,7 +3286,7 @@
         {
           "properties": {
             "device_name": {
-              "type": "string",
+              "$ref": "#/definitions/cloudifyStringOrGetInput",
               "default": "auto",
               "description": "The device name this volume will be attached to.\nDefault value is *auto*,\nwhich means openstack will auto-assign a device.\nNote that if you do explicitly set a value,\nthis value may not be the actual device name assigned.\nSometimes the device requested will not be available and openstack will assign it to a different device,n\this is why we recommend using *auto*."
             },
@@ -3557,20 +3557,20 @@
       "type": "object",
       "properties": {
         "ansible_playbook_executable_path": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "default": "ansible-playbook",
           "description": "A full path to your ansible_playbook executable if user don't want to\nuse the included version of executable in the plugin"
         },
         "playbook_source_path": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "A full path/URL that contain playbook specified in playbook_path\nor site_yaml_path."
         },
         "playbook_path": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "A path to your `site.yaml` or `main.yaml` in your\nAnsible Playbook relative to blueprint or playbook_source_path\nif playbook_source_path is URL to archive File relative inside the archive."
         },
         "site_yaml_path": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "DEPRECATED.\nA path to your `site.yaml` or `main.yaml` in your\nAnsible Playbook relative to blueprint or playbook_source_path\nif playbook_source_path is URL to archive File relative inside the archive."
         },
         "additional_playbook_files": {
@@ -3579,7 +3579,7 @@
           "description": "A list of string paths blueprint resources that you\nwould like to download to the playbook directory.\nIf you use this variable, you must list all of the paths\nthat you expect to download."
         },
         "sources": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Your Inventory sources. Either YAML or a path to a file.\nIf not provided the inventory will be take from the `sources`\nruntime property."
         },
         "run_data": {
@@ -3611,51 +3611,51 @@
           }
         },
         "debug_level": {
-          "type": "integer",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
           "default": 2,
           "description": "Debug level"
         },
         "additional_args": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Additional args that you want to use, for example, '-c local'."
         },
         "start_at_task": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Start the playbook at the task matching this name"
         },
         "scp_extra_args": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specify extra arguments to pass to scp only (e.g. -l)"
         },
         "sftp_extra_args": {
           "description": "Specify extra arguments to pass to sftp only (e.g. -f, -l)",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "ssh_common_args": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "default": "Specify common arguments to pass to sftp/scp/ssh (e.g. ProxyCommand)"
         },
         "ssh_extra_args": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specify extra arguments to pass to ssh only (e.g. -R)"
         },
         "timeout": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Override the connection timeout in seconds (default=10)",
           "default": 10
         },
         "save_playbook": {
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "description": "Save playbook after action",
           "default": false
         },
         "remerge_sources": {
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "description": "update sources on target node",
           "default": "false"
         },
         "ansible_become": {
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "description": "A boolean value, `true` or `false` whether\nto assume the user privileges.",
           "default": false
         }
@@ -3783,16 +3783,16 @@
       "type": "object",
       "properties": {
         "executable_path": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "The path to the terraform binary executable.",
           "default": "/usr/bin/terraform"
         },
         "storage_path": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Directory to store downloaded Terraform templates. The directory must\neither already exist and be writable by 'cfyuser', or alternatively\nbe create-able by 'cfyuser'.\nThe default is an empty string, which prompts the plugin to use the OS\ntemporary directory."
         },
         "plugins_dir": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Location where Terraform plugins are located. If a value is provided, then\nthe Terraform plugin uses '--plugin-dir' with that value, ensuring that\nno plugins are downloaded on-the-fly, for increased stability.\nIf a value is not provided, plugins will be downloaded on-the-fly. This is\nnot recommended in production environments."
         }
       }
@@ -3805,7 +3805,7 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Some name."
         },
         "options": {
@@ -3818,7 +3818,7 @@
       "type": "object",
       "properties": {
         "source": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Path or URL to the ZIP file containing the Terraform project.\nIf this is a path, then it must be relative to the blueprint's root."
         },
         "backend": {
@@ -3840,12 +3840,12 @@
       "type": "object",
       "properties": {
         "use_existing_resource": {
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "description": "If true, use an existing Terraform installation rather than installing it",
           "default": true
         },
         "installation_source": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Location to download the Terraform installation from. Ignored if 'use_existing' is true."
         },
         "plugins": {
