@@ -1,0 +1,10 @@
+{
+    "plugins": [
+        "jsonschema"
+    ],
+    "settings": {
+        "jsonschema": {
+            "schemaDirectory": [ "/path/to/schema" ]
+        }
+    }
+}
