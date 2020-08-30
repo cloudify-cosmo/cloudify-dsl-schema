@@ -1,0 +1,23 @@
+{
+  "name": "cloudify_dsl_schema",
+  "version": "1.0.0",
+  "description": "Cloudify DSL JSON Schema",
+  "scripts": {
+    "test": "npm eslint",
+    "pretest": "./node_modules/.bin/eslint --ignore-path .gitignore"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloudify-cosmo/cloudify_dsl_schema.git"
+  },
+  "author": "Alex Molev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cloudify-cosmo/cloudify_dsl_schema/issues"
+  },
+  "homepage": "https://github.com/cloudify-cosmo/cloudify_dsl_schema#readme",
+  "devDependencies": {
+    "eslint": "^7.5.0",
+    "eslint-plugin-jsonschema": "^0.2.0"
+  }
+}
