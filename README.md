@@ -2,9 +2,24 @@
 
 The project contains JSON Schema for Cloudify Blueprints.
 
-The JSON Schema is uploaded to [SchemaStore](http://www.schemastore.org/json/)
+## What you can do?
+### Autocomplete
+Similar to any programing language you can press `CTRL+SPACE` and it will suggest what are the available options.
 
-Currently supported IDEs
+### Suggest properties based on type
+In the node templates when you specify `type` the JSON schema will suggest properties and interfaces that are available for that specific type.
+
+### Detect Missing Mandatory Fields
+If a mandatory field is expected and it's missing you'll get a notification. 
+
+### Detect unknown property
+Some of the objects are sealed to certain properties. If an unkown property is introduced it will show an error message. It's good in cases when an attribute is misspelled.
+
+### IDE Integration
+
+The JSON Schema is uploaded to [SchemaStore](http://www.schemastore.org/json/).
+
+The integration provides Cloudify Json schema to be auto available in the following IDEs: 
 - IntelliJ IDEA
 - PhpStorm
 - PyCharm
@@ -34,3 +49,4 @@ All you need is to save your file that matches the patter `*.cfy.yaml`
 - [cloudify-vsphere-plugin](https://github.com/cloudify-cosmo/cloudify-vsphere-plugin)
 - [tosca-vcloud-plugin](https://github.com/cloudify-cosmo/tosca-vcloud-plugin)
  
+## Adding support for your plugin
