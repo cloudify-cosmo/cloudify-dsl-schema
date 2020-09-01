@@ -6,6 +6,8 @@ The project contains JSON Schema for Cloudify Blueprints.
 ### Autocomplete
 Similar to any programing language you can press `CTRL+SPACE` and it will suggest what are the available options.
 
+### Property Type Validation
+ 
 ### Suggest properties based on type
 In the node templates when you specify `type` the JSON schema will suggest properties and interfaces that are available for that specific type.
 
@@ -49,4 +51,6 @@ All you need is to save your file that matches the patter `*.cfy.yaml`
 - [cloudify-vsphere-plugin](https://github.com/cloudify-cosmo/cloudify-vsphere-plugin)
 - [tosca-vcloud-plugin](https://github.com/cloudify-cosmo/tosca-vcloud-plugin)
  
-## Adding support for your plugin
+## Adding Validation and Autocomplete for your plugin
+
+For how to write JSON Schema please follow the link [json-schema.org](https://json-schema.org)
