@@ -15,6 +15,15 @@ Each property is assigned to a specific type. The type can be `integer`, `string
 ### Suggest properties based on type
 In the node templates when you specify `type` the JSON schema will suggest properties and interfaces that are available for that specific type.
 
+As you can see in the images bellow the available properties for type `cloudify.rest.request` are different from `cloudify.nodes.ftp`
+
+Cloudify Rest Request 
+
+![Cloudify Rest Request](/images/properties_rest_request.png)
+
+Cloudify FTP
+
+![Cloudify FTP](/images/properties_ftp.png)
 ### Detect Missing Mandatory Fields
 If a mandatory field is expected and it's missing you'll get a notification. 
 
