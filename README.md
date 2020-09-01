@@ -24,8 +24,11 @@ Cloudify Rest Request
 Cloudify FTP
 
 ![Cloudify FTP](/images/properties_ftp.png)
-### Detect Missing Mandatory Fields
+
+### Detect Missing Required Properties
 If a mandatory field is expected and it's missing you'll get a notification. 
+
+![Missing Mandatory Property](/images/property_missing.png)
 
 ### Detect unknown property
 Some of the objects are sealed to certain properties. If an unkown property is introduced it will show an error message. It's good in cases when an attribute is misspelled.
