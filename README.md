@@ -35,8 +35,10 @@ For most of the properties a description is available. The description can assis
 
 ![File Mode Description](/images/property_description.png)
 
-### Detect unknown property
-Some of the objects are sealed to certain properties. If an unkown property is introduced it will show an error message. It's good in cases when an attribute is misspelled.
+### Detect not allowed property
+Some of the objects are sealed to certain properties. If an unknown property is introduced it will show an error message. It's good in cases when an attribute is misspelled.
+
+![Not Allowed Property](/images/property_not_allowed.png)
 
 ### IDE Integration
 
