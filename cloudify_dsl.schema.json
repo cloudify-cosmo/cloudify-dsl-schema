@@ -926,10 +926,1242 @@
             "properties": { "$ref": "#/definitions/nodeTypeOpenstackRecordSetProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeOpenstackRecordSetInterfaces"}
           }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.nodes.DeploymentProxy" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeCloudifyNodesDeploymentProxyProperties"},
+            "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyNodesDeploymentProxyInterfaces"}
+          }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.nodes.NodeInstanceProxy" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeCloudifyNodesNodeInstanceProxyProperties"}
+          }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.nodes.CloudInit.CloudConfig" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeCloudifyNodesCloudInitCloudConfigProperties"},
+            "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyNodesCloudInitCloudConfigInterfaces"}
+          }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.keys.nodes.RSAKey" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeCloudifyNodesRSAKeyProperties"},
+            "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyNodesRSAKeyInterfaces"}
+          }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.terminal.raw" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeCloudifyTerminalRawProperties"},
+            "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyTerminalRawInterfaces"}
+          }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.nodes.File" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeCloudifyNodesFileProperties"},
+            "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyNodesFileInterfaces"}
+          }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.nodes.ftp" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeCloudifyNodesFTPProperties"},
+            "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyNodesFTPInterfaces"}
+          }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.rest.Requests" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeCloudifyRestRequestsProperties"},
+            "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyRestRequestsInterfaces"}
+          }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.rest.BunchRequests" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeCloudifyRestBunchRequestsProperties"},
+            "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyRestBunchRequestsInterfaces"}
+          }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.nodes.secrets.Writer" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeCloudifyNodesSecretsWriterProperties"},
+            "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyNodesSecretsWriterInterfaces"}
+          }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.nodes.secrets.Reader" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeCloudifyNodesSecretsReaderProperties"},
+            "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyNodesSecretsReaderInterfaces"}
+          }}
         }
       ],
       "required": ["type"],
       "additionalProperties": false
+    },
+    "cloudifyDatatypesBlueprint": {
+      "type": "object",
+      "properties": {
+        "external_resource": {
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "description": "Use external resource.",
+          "default": false
+        },
+        "id": {
+          "description": "This is the blueprint that the deployment node is a proxy to."
+        },
+        "main_file_name": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "The application blueprint filename. If the blueprint consists many\nimported files this is the main blueprint.",
+          "default": "blueprint.yaml"
+        },
+        "blueprint_archive": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "The URL of a .zip to upload to the manager.(Can be skipped if external_resource == True)"
+        }
+      }
+    },
+    "cloudifyDatatypesDeployment": {
+      "type": "object",
+      "properties": {
+        "external_resource": {
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "description": "Use external resource.",
+          "default": false
+        },
+        "id": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "This is the deployment that the node is a proxy to."
+        },
+        "inputs": {
+          "type":"object",
+          "description": "The inputs to the deployment."
+        },
+        "outputs": {
+          "type": "object",
+          "description": "A dictionary of \"{ key: value, key: value }\".\nGet \"key\" the deployment.\nSet \"value\" runtime property to the value of the output."
+        },
+        "all_outputs": {
+          "description": "Ignored if \"outputs\" is specified.\nOtherwise, if true (the default), then all outputs from the remote\ndeployment are exposed. If false, then no output is exposed.",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": true
+        },
+        "logs": {
+          "description": "Logs redirect settings, by default {redirect: true}",
+          "type":"object"
+        }
+      }
+    },
+    "cloudifyDatatypesDeploymentProxy": {
+      "type": "object",
+      "properties": {
+        "blueprint": {
+          "$ref": "#/definitions/cloudifyDatatypesBlueprint"
+
+        },
+        "deployment": {
+          "$ref": "#/definitions/cloudifyDatatypesDeployment"
+        },
+        "executions_start_args": {
+          "type": "object",
+          "description": "Optional parems for executions"
+        },
+        "reexecute": {
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false,
+          "description": "Reexecte workflows, on external deployment"
+        }
+      },
+      "required": ["blueprint", "deployment"]
+    },
+    "cloudifyDatatypesNode": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        }
+      }
+    },
+    "cloudifyDatatypesNodeInstance": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "$ref": "#/definitions/cloudifyDatatypesNode"
+        },
+        "id": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        }
+      }
+    },
+    "cloudifyDatatypesNodeInstanceProxy": {
+      "type": "object",
+      "properties": {
+        "blueprint": {
+          "$ref": "#/definitions/cloudifyDatatypesBlueprint"
+        },
+        "deployment": {
+          "$ref": "#/definitions/cloudifyDatatypesDeployment"
+        },
+        "executions_start_args": {
+          "type": "object",
+          "description": "Optional params for executions"
+        },
+        "reexecute": {
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false,
+          "description": "Reexecte workflows, on external deployment"
+        },
+        "node_instance": {
+          "$ref": "#/definitions/cloudifyDatatypesNodeInstance"
+        }
+      },
+      "required": ["blueprint", "deployment"]
+    },
+    "cloudifyDatatypesKey": {
+      "type": "object",
+      "properties": {
+        "private_key_path": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "public_key_path": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "default": "~/.ssh/id_rsa.pub"
+        },
+        "key_name": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "algorithm": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "default": "RSA"
+        },
+        "bits": {
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
+          "default": 2048
+        },
+        "comment": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "passphrase": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "openssh_format": {
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput"
+        },
+        "unvalidated": {
+          "description": "Unvalidated parameters."
+        }
+      }
+    },
+    "cloudifyDatatypesTerminalAuth": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "description": "The login credentials for ssh server.",
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "password": {
+          "description": "optional, ssh password",
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "ip": {
+          "description": "optional, device ip",
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "key_content": {
+          "description": "optional, ssh user key",
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "port": {
+          "description": "optional, ssh port",
+          "default": 22,
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
+        },
+        "store_logs": {
+          "description": "optional, save communication logs",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false
+        },
+        "promt_check": {
+          "description": "optional, list of prompts accepted from device, default is \"#/$\"",
+          "type":"array",
+          "items": { "type":"string"}
+        },
+        "warnings": {
+          "description": "optional, list of possible warnings without new line",
+          "type": "array",
+          "items": { "type": "string"}
+        },
+        "errors": {
+          "description": "optional, list of possible errors without new line",
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "criticals": {
+          "description": "optional, list of possible criticals without new line",
+          "type": "array",
+          "items": {"type":"string"}
+        },
+        "exit_command": {
+          "description": "optional, command for close connection, default 'exit'",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "default": "exit"
+        },
+        "smart_device": {
+          "description": "optional, use shell extension",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false
+        }
+      }
+    },
+    "cloudifyDatatypesFile": {
+      "type": "object",
+      "properties": {
+        "resource_path": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "The path relative to the blueprint where the file is stored.\nCurrently this must be packaged in the blueprint. An external URI is\nnot valid."
+        },
+        "file_path": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "The path on the machine where the file should be saved."
+        },
+        "owner": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "The owner string, such as \"centos:wheel\""
+        },
+        "mode": {
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
+          "description": "The file permissions, such as 777. Must be provided as an integer.\n\"0777\" and 0777 are not valid. Only 777."
+        },
+        "template_variables": {
+          "description": "Variables to render Jinja templates.",
+          "type": "object"
+        },
+        "use_sudo": {
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "description": "Whether or not to use sudo to move, rename, delete, chown, chmod,\nthe file.",
+          "default": false
+        },
+        "allow_failure": {
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "description": "If the download fails, log the error and continue.",
+          "default": false
+        }
+      },
+      "required": ["resource_path", "file_path", "owner", "mode"]
+    },
+    "cloudifyDatatypesFtpAuth": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "description": "The login credentials for ftp server.",
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "password": {
+          "description": "optional, ftp password",
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "ip": {
+          "description": "optional, device ip",
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "port": {
+          "description": "optional, ftp port",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
+          "default": 21
+        },
+        "ignore_host": {
+          "description": "optional, ignore host in ftp response",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false
+        },
+        "tls": {
+          "description": "optional, use tls connection to ftp",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false
+        }
+      }
+    },
+    "nodeTypeCloudifyNodesDeploymentProxyProperties": {
+      "type": "object",
+      "properties": {
+        "resource_config": {
+          "$ref": "#/definitions/cloudifyDatatypesDeploymentProxy"
+        },
+        "client": {
+          "description": "Client configuration, if empty will be reused manager client:\n  host: Host of Cloudify's management machine.\n  port: Port of REST API service on management machine.\n  protocol: Protocol of REST API service on management machine,\n            defaults to http.\n  api_version: version of REST API service on management machine.\n  headers: Headers to be added to request.\n  query_params: Query parameters to be added to the request.\n  cert: Path to a copy of the server's self-signed certificate.\n  trust_all: if `False`, the server's certificate\n            (self-signed or not) will be verified.\n  username: Cloudify User username.\n  password: Cloudify User password.\n  token: Cloudify User token.\n  tenant: Cloudify Tenant name.",
+          "type": "object",
+          "properties": {
+            "host": {
+              "type": "string",
+              "default": "127.0.0.1"
+            },
+            "username": {
+              "type": "string",
+              "default": "admin"
+            },
+            "password": {
+              "type":"string",
+              "default":"admin"
+            },
+            "tenant": {
+              "type":"string",
+              "default": "default_tenant"
+            }
+          }
+        },
+        "plugins": {
+          "description": "Optional, list of plugins for upload.\n  wagon_path: Url for plugin wagon file.\n  plugin_yaml_path: Url for plugin yaml file.",
+          "type": "array",
+          "items": {"type":"string"}
+        },
+        "secrets": {
+          "description": "Optional, dictionary of secrets for set before run deployments.",
+          "type": "object"
+        }
+      }
+    },
+    "nodeTypeCloudifyNodesDeploymentProxyInterfaces": {
+      "type": "object",
+      "properties": {
+        "cloudify.interfaces.lifecycle": {
+          "type": "object",
+          "properties": {
+            "create": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["cfy_util.cloudify_deployment_proxy.tasks.upload_blueprint"]
+                }
+              }
+            },
+            "configure": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "object",
+                  "enum": ["cfy_util.cloudify_deployment_proxy.tasks.create_deployment"]
+                }
+              }
+            },
+            "start": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["cfy_util.cloudify_deployment_proxy.tasks.execute_start"]
+                },
+                "inputs": {
+                  "type": "object",
+                  "properties": {
+                    "workflow_id": {
+                      "type": "string",
+                      "default": "install"
+                    },
+                    "timeout": {
+                      "type": "integer",
+                      "description": "How long (in seconds) to wait for execution to finish before timing out",
+                      "default": 1800
+                    },
+                    "interval": {
+                      "type": "integer",
+                      "description": "Polling interval (seconds)",
+                      "default": 10
+                    }
+                  }
+                }
+              }
+            },
+            "stop": {
+              "type":"object",
+              "properties": {
+                  "implementation": {
+                    "type": "string",
+                    "enum": ["cfy_util.cloudify_deployment_proxy.tasks.execute_start"]
+                  },
+                  "inputs": {
+                    "type": "object",
+                    "properties": {
+                      "workflow_id": {
+                        "type": "string",
+                        "default": "uninstall"
+                      },
+                      "resource_config": {
+                        "$ref": "#/definitions/cloudifyDatatypesDeploymentProxy"
+                      }
+                    }
+                  }
+              }
+            },
+            "delete": {
+              "type":"object",
+              "properties": {
+                "implementation": {
+                  "type":"string",
+                  "enum": ["cfy_util.cloudify_deployment_proxy.tasks.delete_deployment"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nodeTypeCloudifyNodesNodeInstanceProxyProperties": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/definitions/nodeTypeCloudifyNodesDeploymentProxyProperties"},
+        {
+          "properties": {
+            "resource_config": {
+              "$ref": "#/definitions/cloudifyDatatypesNodeInstanceProxy"
+            }
+          }
+        }
+      ]
+    },
+    "nodeTypeCloudifyNodesCloudInitCloudConfigProperties": {
+      "type": "object",
+      "properties": {
+        "header": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "default": "#cloud-config"
+        },
+        "encode_base64": {
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": "false"
+        },
+        "resource_config": {
+          "type": "object"
+        }
+      }
+    },
+    "nodeTypeCloudifyNodesCloudInitCloudConfigInterfaces": {
+      "type":"object",
+      "properties": {
+        "cloudify.interfaces.lifecycle": {
+          "type": "object",
+          "properties": {
+            "create": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["cloudinit.cloudify_cloudinit.tasks.update"]
+                }
+              }
+            },
+            "configure": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["cloudinit.cloudify_cloudinit.tasks.update"]
+                }
+              }
+            },
+            "start": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["cloudinit.cloudify_cloudinit.tasks.update"]
+                }
+              }
+            },
+            "stop": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type":"string",
+                  "enum": ["cloudinit.cloudify_cloudinit.tasks.update"]
+                }
+              }
+            },
+            "delete": {
+              "type":"object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["cloudinit.cloudify_cloudinit.tasks.delete"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nodeTypeCloudifyNodesRSAKeyProperties":{
+      "type":"object",
+      "properties": {
+        "use_secret_store": {
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": true
+        },
+        "use_secrets_if_exist": {
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "description": "this flag is able to be true only if use_secret_store is true\nif this property is false the secret for the key value will be\ncreated, if true then the existing secrets of an existing node\nwith same key_name will be used as a key, if this property is true\nand the secrets does not exist they will be created.",
+          "default": false
+        },
+        "key_name": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Deprecated. Use resource_config.key_name."
+        },
+        "resource_config": {
+          "description": "A dictionary of values to pass to configure the key.",
+          "$ref": "#/definitions/cloudifyDatatypesKey"
+        }
+      }
+    },
+    "nodeTypeCloudifyNodesRSAKeyInterfaces":{
+      "type":"object",
+      "properties": {
+        "cloudify.interfaces.lifecycle": {
+          "type": "object",
+          "properties": {
+            "create": {
+              "type":"object",
+              "properties": {
+                "implementation": {
+                  "type":"string",
+                  "enum": ["keys.cloudify_ssh_key.operations.create"]
+                },
+                "inputs": {
+                  "store_public_key_material": {
+                    "description": "Allow the public key material to be stored as a runtime\nproperty. Recommended.",
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "store_private_key_material": {
+                    "description": "Allow the private key material to be stored as a runtime\nproperty. Not recommended for manager deployments.",
+                    "type": "boolean",
+                    "default": false
+                  }
+                }
+              }
+            },
+            "delete": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["keys.cloudify_ssh_key.operations.delete"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nodeTypeCloudifyTerminalRawProperties": {
+      "type": "object",
+      "properties": {
+        "terminal_auth": {
+          "description": "terminal credentials, like example:\n  user: <user name>\n  password: <user password>\n  ip: <host name>",
+          "$ref": "#/definitions/cloudifyDatatypesTerminalAuth"
+        }
+      }
+    },
+    "nodeTypeCloudifyTerminalRawInterfaces": {
+      "type": "object",
+      "properties": {
+        "cloudify.interfaces.lifecycle": {
+          "type":"object",
+          "properties": {
+            "create": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["terminal.cloudify_terminal.tasks.run"]
+                },
+                "inputs": { "type": "object"}
+              }
+            },
+            "configure": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["terminal.cloudify_terminal.tasks.run"]
+                },
+                "inputs": { "type": "object" }
+              }
+            },
+            "start": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["terminal.cloudify_terminal.tasks.run"]
+                },
+                "inputs": {"type": "object"}
+              }
+            },
+            "stop": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["terminal.cloudify_terminal.tasks.run"]
+                },
+                "inputs": {
+                  "type": "object"
+                }
+              }
+            },
+            "delete": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["terminal.cloudify_terminal.tasks.run"]
+                },
+                "inputs": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nodeTypeCloudifyNodesFileProperties": {
+      "type":"object",
+      "properties": {
+        "resource_config": {
+          "$ref": "#/definitions/cloudifyDatatypesFile"
+        }
+      },
+      "required": ["resource_config"]
+    },
+    "nodeTypeCloudifyNodesFileInterfaces": {
+      "type": "object",
+      "properties": {
+        "cloudify.interfaces.lifecycle": {
+          "type":"object",
+          "properties": {
+            "create": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["cfy_files.cloudify_files.tasks.create"]
+                }
+              }
+            },
+            "delete": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["cfy_files.cloudify_files.tasks.delete"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nodeTypeCloudifyNodesFTPProperties": {
+      "type": "object",
+      "properties": {
+        "resource_config": {
+          "$ref": "#/definitions/cloudifyDatatypesFtpAuth"
+        },
+        "raw_files": {
+          "type": "object",
+          "description": "list files from blueprint to upload"
+        },
+        "files": {
+          "type": "object",
+          "description": "list files with content from blueprint to upload"
+        }
+      },
+      "required": ["resource_config"]
+    },
+    "nodeTypeCloudifyNodesFTPInterfaces":{
+      "type": "object",
+      "properties": {
+        "cloudify.interfaces.lifecycle": {
+          "type": "object",
+          "properties": {
+            "create": {
+              "type":"object",
+              "properties": {
+                "implementation": {
+                  "type":"string",
+                  "enum": ["cfy_ftp.cloudify_ftp.tasks.create"]
+                },
+                "inputs": {
+                  "type":"object",
+                  "properties": {
+                    "resource_config": {
+                      "$ref": "#/definitions/cloudifyDatatypesFtpAuth"
+                    },
+                    "raw_files": {
+                      "type": "object",
+                      "description": "list files from blueprint to upload"
+                    },
+                    "files": {
+                      "type": "object",
+                      "description": "list files with content from blueprint to upload"
+                    }
+                  }
+                }
+              }
+            },
+            "delete": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type":"string",
+                  "enum": ["cfy_ftp.cloudify_ftp.tasks.delete"]
+                },
+                "inputs": {
+                  "resource_config": {
+                    "$ref": "#/definitions/cloudifyDatatypesFtpAuth"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nodeTypeCloudifyRestRequestsProperties": {
+      "type": "object",
+      "properties": {
+        "hosts": {
+          "description": "list of hosts name or IP addresses of Rest Servers",
+          "type":"array",
+          "items": {"type":"string"}
+        },
+        "host": {
+          "description": "host name or IP addresses of Rest Servers\nif list of hosts is not needed single host can be provided by this\nproperty. NOTE: the 'hosts' property overwirte the 'host' property",
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "port": {
+          "description": "port number. When -1 default ports are used\n(80 for ssl = false and 443 for ssl = true)",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
+          "default": -1
+        },
+        "ssl": {
+          "description": "http or https",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false
+        },
+        "verify": {
+          "description": "A boolean which controls whether we verify the server's TLS\ncertificate. Supported such values:\n* `True`: default value, check certificaties,\n* `False`: ignore server certificates,\n* `<file path>`: path to certificate on local system,\n* `<certificate content>`: certificate content.",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": true
+        },
+        "cert": {
+          "description": "Supported such values:\n* `None`: default value, ignore client certificates,\n* `<file path>`: path to certificate on local system,\n* `<certificate content>`: certificate content.",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "default": null
+        },
+        "timeout": {
+          "description": "Timeout value for requests.",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
+          "default": null
+        },
+        "proxies": {
+          "description": "List of proxies.",
+          "type": "object"
+        },
+        "params": {
+          "description": "Template parameters. Default is empty dictionary.",
+          "type": "object"
+        }
+      }
+    },
+    "restTemplateInputs": {
+      "type": "object",
+      "properties": {
+        "params": {
+          "description": "Template parameters. Default is empty dictionary. Merged\nwith params from node properties and has 'ctx' key for\ncurrent action context.",
+          "type": "object"
+        },
+        "template_file": {
+          "description": "Template path in blueprint directory",
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "save_path": {
+          "description": "Save result to runtime properties key. Default is directly\nsave to runtime properties.",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false
+        },
+        "prerender": {
+          "description": "Prerender template before run calls jinja render=>yaml parse.\nDefault is yaml parse=>jinja render.",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false
+        },
+        "remove_calls": {
+          "description": "Remove calls list from results. Default: save calls in\nruntime properties.",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false
+        },
+        "force_rerun": {
+          "description": "Rerun operation if on next operation rerun",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false
+        },
+        "retry_count": {
+          "description": "Rerun count on warning on catched warnigs",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
+          "default": 1
+        },
+        "retry_sleep": {
+          "description": "Sleep between rerun",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
+          "default": 15
+        }
+      }
+    },
+    "nodeTypeCloudifyRestRequestsInterfaces": {
+      "type": "object",
+      "properties": {
+        "cloudify.interfaces.lifecycle": {
+          "type": "object",
+          "properties": {
+            "create": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["rest.cloudify_rest.tasks.execute"]
+                },
+                "inputs": {
+                  "$ref": "#/definitions/restTemplateInputs"
+                }
+              }
+            },
+            "configure": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["rest.cloudify_rest.tasks.execute"]
+                },
+                "inputs": {
+                  "$ref": "#/definitions/restTemplateInputs"
+                }
+              }
+            },
+            "start": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type":"string",
+                  "enum": ["rest.cloudify_rest.tasks.execute"]
+                },
+                "inputs": {
+                  "$ref": "#/definitions/restTemplateInputs"
+                }
+              }
+            },
+            "stop": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["rest.cloudify_rest.tasks.execute"]
+                },
+                "inputs": {
+                  "$ref": "#/definitions/restTemplateInputs"
+                }
+              }
+            },
+            "delete": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type":"string",
+                  "enum": ["rest.cloudify_rest.tasks.execute"]
+                },
+                "inputs": {
+                  "$ref": "#/definitions/restTemplateInputs"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nodeTypeCloudifyRestBunchRequestsProperties": {
+      "type": "object",
+      "properties": {
+        "hosts": {
+          "description": "list of hosts name or IP addresses of Rest Servers",
+          "type": "array",
+          "items": { "type": "string"}
+        },
+        "host": {
+          "description": "host name or IP addresses of Rest Servers\nif list of hosts is not needed single host can be provided by this\nproperty. NOTE: the 'hosts' property overwirte the 'host' property",
+          "type": "array",
+          "items": { "type":"string"}
+        },
+        "port": {
+          "description": "port number. When -1 default ports are used\n(80 for ssl = false and 443 for ssl = true)",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
+          "default": -1
+        },
+        "ssl": {
+          "description": "http or https",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false
+        },
+        "verify": {
+          "description": "A boolean which controls whether we verify the server's TLS\ncertificate. Supported such values:\n* `True`: default value, check certificaties,\n* `False`: ignore server certificates,\n* `<file path>`: path to certificate on local system,\n* `<certificate content>`: certificate content.",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": true
+        },
+        "cert": {
+          "description": "Supported such values:\n* `None`: default value, ignore client certificates,\n* `<file path>`: path to certificate on local system,\n* `<certificate content>`: certificate content.",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "default": null
+        },
+        "timeout": {
+          "description": "Timeout value for requests.",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
+          "default": null
+        },
+        "proxies": {
+          "description": "List of proxies.",
+          "type": "object"
+        },
+        "params": {
+          "description": "Template parameters. Default is empty dictionary.",
+          "type": "object"
+        }
+      }
+    },
+    "nodeTypeCloudifyRestBunchRequestsInterfaces": {
+      "type": "object",
+      "properties": {
+        "cloudify.interfaces.lifecycle": {
+          "type": "object",
+          "properties": {
+            "create": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["rest.cloudify_rest.tasks.bunch_execute"]
+                },
+                "inputs": {
+                  "type": "object",
+                  "properties": {
+                    "auth": {
+                      "type": "object"
+                    },
+                    "templates":{
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            },
+            "configure": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["rest.cloudify_rest.tasks.bunch_execute"]
+                },
+                "inputs": {
+                  "type": "object",
+                  "properties": {
+                    "auth": {
+                      "type": "object"
+                    },
+                    "templates":{
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            },
+            "start": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["rest.cloudify_rest.tasks.bunch_execute"]
+                },
+                "inputs": {
+                  "type": "object",
+                  "properties": {
+                    "auth": {
+                      "type": "object"
+                    },
+                    "templates":{
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            },
+            "stop": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["rest.cloudify_rest.tasks.bunch_execute"]
+                },
+                "inputs": {
+                  "type": "object",
+                  "properties": {
+                    "auth": {
+                      "type": "object"
+                    },
+                    "templates":{
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            },
+            "delete": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["rest.cloudify_rest.tasks.bunch_execute"]
+                },
+                "inputs": {
+                  "type": "object",
+                  "properties": {
+                    "auth": {
+                      "type": "object"
+                    },
+                    "templates":{
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nodeTypeCloudifyNodesSecretsWriterProperties": {
+      "type": "object",
+      "properties": {
+        "entries": {
+          "type": "object"
+        },
+        "do_not_delete": {
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false
+        },
+        "variant": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "separator": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        }
+      }
+    },
+    "nodeTypeCloudifyNodesSecretsWriterInterfaces": {
+      "type": "object",
+      "properties": {
+        "cloudify.interfaces.lifecycle": {
+          "type": "object",
+          "properties": {
+            "create": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["secrets.cloudify_secrets.tasks.create"]
+                }
+              }
+            },
+            "delete": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["secrets.cloudify_secrets.tasks.delete"]
+                }
+              }
+            }
+          }
+        },
+        "cloudify.interfaces.operations": {
+          "type": "object",
+          "properties": {
+            "update": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["secrets.cloudify_secrets.tasks.update"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nodeTypeCloudifyNodesSecretsReaderProperties": {
+      "type": "object",
+      "properties": {
+        "keys": {
+          "type":"array",
+          "items": { "type": "string"}
+        },
+        "variant": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        },
+        "separator": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
+        }
+      }
+    },
+    "nodeTypeCloudifyNodesSecretsReaderInterfaces": {
+      "type": "object",
+      "properties": {
+        "cloudify.interfaces.lifecycle": {
+          "type":"object",
+          "properties": {
+            "create": {
+              "type":"object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["secrets.cloudify_secrets.tasks.read"]
+                }
+              }
+            }
+          }
+        },
+        "cloudify.interfaces.operations": {
+          "type": "object",
+          "properties": {
+            "update": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["secrets.cloudify_secrets.tasks.read"]
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "cloudifyDataTypesAgentConfig": {
       "type": "object",
@@ -1116,7 +2348,7 @@
       "properties": {
         "id": {
           "description": "Resource id",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         }
       }
     },
@@ -1847,7 +3079,7 @@
       "allOf": [
         { "$ref": "#/definitions/openstackExternalResource"},
         { "$ref": "#/definitions/openstackCreateIfMissing"},
-        { "$ref": "#/definitionns/openstackClientConfig"},
+        { "$ref": "#/definitions/openstackClientConfig"},
         {
           "properties": {
             "fixed_ip": {
