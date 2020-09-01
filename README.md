@@ -30,6 +30,11 @@ If a mandatory field is expected and it's missing you'll get a notification.
 
 ![Missing Mandatory Property](/images/property_missing.png)
 
+### Property Description
+For most of the properties a description is available. The description can assist you to understand what is the best way to use it.
+
+![File Mode Description](/images/property_description.png)
+
 ### Detect unknown property
 Some of the objects are sealed to certain properties. If an unkown property is introduced it will show an error message. It's good in cases when an attribute is misspelled.
 
