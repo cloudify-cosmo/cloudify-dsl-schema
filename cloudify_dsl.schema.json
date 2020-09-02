@@ -7358,7 +7358,7 @@
         "condifure": { "$ref": "#/definitions/nodeTemplateInterfaceAction" },
         "delete": { "$ref": "#/definitions/nodeTemplateInterfaceAction" }
       },
-      "patternProperties": { 
+      "patternProperties": {
         "": {"$ref": "#/definitions/nodeTemplateInterfaceAction" }
       }
     },
@@ -7423,11 +7423,11 @@
           "description": "Valid values: all_to_all and all_to_one (See explanation below.)",
           "enum": ["all_to_all", "all_to_one"]
         },
-        "source_interface": {
+        "source_interfaces": {
           "type": "object",
           "description": "A dictionary of interfaces."
         },
-        "target_interface": {
+        "target_interfaces": {
           "type": "object",
           "description": "A dictionary of interfaces."
         }
