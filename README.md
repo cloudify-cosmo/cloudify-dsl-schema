@@ -71,6 +71,47 @@ All you need is to save your file that matches the patter `*.cfy.yaml`
 - [ ] [cloudify-vsphere-plugin](https://github.com/cloudify-cosmo/cloudify-vsphere-plugin)
 - [ ] [tosca-vcloud-plugin](https://github.com/cloudify-cosmo/tosca-vcloud-plugin)
  
-## Adding Validation and Autocomplete for your plugin
+## Adding your plugin's node type support
 
+The section explain how to add support for your plugin node types to node template.
+
+It will walk you though on how to add a condition on a node template type property so the properties and interfaces will be corolated to your node type.
+
+Open [cloudify_dsl_schema.json](/cloudify_dsl_schema.json) file.
+
+Add properties and interfaces definitions of your object.
+ 
+For example if your node type is `cloudify.kubernetes.resources.BlueprintDefinedResource`
+
+Create 2 definitions one for properties `nodeTypeKubernetesResourcesBlueprintDefinedResourceProperties` and the second one for interfaces `nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces`
+ 
+Add condition on type property for node template in the list `/properties/definitions/nodeTemplate/allOff`
+
+for the example above it will look like
+
+``` javascript
+{
+    "if": { 
+      "properties": { 
+        "type": { 
+          "const": "cloudify.kubernetes.resources.BlueprintDefinedResource" 
+        }
+      }
+    },
+    "then": { 
+      "properties": {
+        "properties": { 
+          "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceProperties"
+        },
+        "interfaces": { 
+          "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"
+        }
+      }
+    }
+}
+```
+
+ 
 For how to write JSON Schema please follow the link [json-schema.org](https://json-schema.org)
+
+to add support for your plugin node type
