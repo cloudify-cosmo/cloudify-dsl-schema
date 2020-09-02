@@ -3878,22 +3878,16 @@
             "remove_hosts": {
               "type": "object",
               "properties": {
-                "type": "object",
-                "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["openstack.openstack_plugin.resources.compute.host_aggregate.remove_hosts"]
+                },
+                "inputs": {
                   "type": "object",
                   "properties": {
-                    "implementation": {
-                      "type": "string",
-                      "enum": ["openstack.openstack_plugin.resources.compute.host_aggregate.remove_hosts"]
-                    },
-                    "inputs": {
-                      "type": "object",
-                      "properties": {
-                        "hosts": {
-                          "type":"array",
-                          "items": { "type": "string"}
-                        }
-                      }
+                    "hosts": {
+                      "type":"array",
+                      "items": { "type": "string"}
                     }
                   }
                 }
