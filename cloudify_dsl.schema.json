@@ -1207,61 +1207,61 @@
       "properties": {
         "endpoints_active_directory": {
           "description": "A Microsoft Azure Active Directory endpoint.",
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "default": "https://login.microsoftonline.com"
         },
         "endpoints_resource_manager": {
           "description": "A Microsoft Azure Active Directory Resource Manager.",
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "default": "https://management.azure.com"
         },
         "endpoint_resource": {
           "description": "A Microsoft Azure Active Directory Resource Id.",
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "default": "https://management.core.windows.net/"
         },
         "endpoint_verify": {
           "description": "Connection certificate verify.",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": true
         },
         "subscription_id": {
           "description": "A Microsoft Azure subscription ID. This is a unique\nuser account in Azure. This can be found in the\nSubscriptions tab on your dashboard.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "tenant_id": {
           "description": "A Microsoft Azure tenant ID. This can be found inthe Azure Active Directory dashboard by accessing\nyour directory. Open the Application Endpoints\ndialog and your tenant ID will be in the URL for\nthe OAUTH2.0 TOKEN ENDPOINT.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "client_id": {
           "description": "A Microsoft Azure client ID. This can be found in\nthe Azure Active Directory dashboard by accessing\nyour directory. View the Applications tab and select\nthe application used to access Azure APIs.  Your\nclient ID can be found by expanding the ACCESS WEB\nAPIS IN OTHER APPLICATIONS tab.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "client_secret": {
           "description": "A Microsoft Azure client secret key. This can be found\nor generated in the same location as your client ID.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "scale_name_separator": {
           "description": "When scaling resources, a unique name must be sent to\nthe Azure API. Since names are left to the user to\nmanage (the service does not generate unique IDs),\nthis plugin will attempt to append characters or\nnumbers to the end of the resource name when resources\nare scaled out. This value should be a character, or\ncharacters, that will separate the base name from the\ngenerated unique characters.  For instance, if the\nbase name of a resource is \"myvm\", the separator is\nset to \"_\", and a scale workflow attempts to create\nanother resource, the resulting name could be\nsomething like \"myvm_1\". This field can be left blank.",
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "default": "_"
         },
         "scale_name_suffix_chars": {
           "description": "A string of characters (ASCII) to be used when\ngenerating unique suffix data when scaling resources.\nSee \"scale_name_separator\" for more information.",
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "default": "1234567890"
         },
         "certificate": {
           "description": "Certificate private key.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "thumbprint": {
           "description": "Certificate thumbprint.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "cloud_environment": {
           "description": "An alternative cloud environment.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         }
       },
       "required": ["scale_name_suffix_chars"]
@@ -1272,7 +1272,7 @@
       "properties": {
        "accountType": {
          "description": "An storage account type (case sensitive)",
-         "type": "string"
+         "$ref": "#/definitions/cloudifyStringOrGetInput"
        },
        "networkAcls": {
          "type": "object"
@@ -1292,18 +1292,18 @@
       "type": "object",
       "properties": {
         "container_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Container for the resource.",
           "default": "vhds"
         },
         "size": {
           "description": "Size of the Page Blob (Azure disk) in GiB. Maximum of 1023 GiB allowed.",
-          "type": "integer",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
           "default": 20
         },
         "force_delete": {
           "description": "If set to true, the resource's \"delete\" lifecycle will purge the\nAzure Data Disk from the Azure Storage Account. If false, the\nData Disk is left as-is in the Storage Account.",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         }
       },
@@ -1330,31 +1330,31 @@
       "description": "See https://msdn.microsoft.com/en-us/library/mt163645.aspx",
       "properties": {
         "description": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "protocol": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "sourcePortRange": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "destinationPortRange": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "sourceAddressPrefix": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "destinationAddressPrefix": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "access": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "priority": {
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "direction": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         }
       },
       "required": ["protocol", "sourceAddressPrefix", "destinationAddressPrefix", "access", "priority", "direction"]
@@ -1373,13 +1373,13 @@
       "description": "See https://msdn.microsoft.com/en-us/library/mt163621.aspx",
       "properties": {
         "addressPrefix": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "networkSecurityGroup": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "routeTable": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         }
       }
     },
@@ -1388,7 +1388,7 @@
       "description": "See https://msdn.microsoft.com/en-us/library/mt502548.aspx",
       "properties": {
         "routes": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         }
       }
     },
@@ -1396,11 +1396,11 @@
       "type": "object",
       "properties": {
         "privateIPAddress": {
-          "type": "string",
-          "description": "Static, private IP Address",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Static, private IP Address"
         },
         "privateIPAllocationMethod": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Defines how a private IP address is assigned. Options\nare Static or Dynamic"
         }
       },
@@ -1411,19 +1411,19 @@
       "description": "See https://msdn.microsoft.com/en-us/library/mt163590.aspx",
       "properties": {
         "publicIPAllocationMethod": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Defines whether the IP address is stable or dynamic.\nOptions are Static or Dynamic"
         },
         "idleTimeoutInMinutes": {
-          "type": "integer",
-          "description": "Specifies the timeout (in minutes) for the TCP idle connection.\nThe value can be set between 4 and 30 minutes",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
+          "description": "Specifies the timeout (in minutes) for the TCP idle connection.\nThe value can be set between 4 and 30 minutes"
         },
         "domainNameLabel": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "The concatenation of the domain name label and the regionalized\nDNS zone make up the fully qualified domain name associated\nwith the public IP address."
         },
         "reverseFqdn": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "A fully qualified domain name that resolves to this\npublic IP address."
         }
       },
@@ -1434,10 +1434,10 @@
       "description": "See https://msdn.microsoft.com/en-us/library/mt163607.aspx",
       "properties": {
         "platformUpdateDomainCount": {
-          "type": "integer",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "platformFaultDomainCount": {
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "sku": {
           "description": "dict to represent sku [for now we only provide name]",
@@ -1450,10 +1450,10 @@
       "description": "https://msdn.microsoft.com/en-us/library/azure/mt163591.aspx",
       "properties": {
         "hardwareProfile": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "storageProfile": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "osProfile": {
           "type": "object"
@@ -1469,16 +1469,16 @@
       "properties": {
         "is_spot_instance": {
           "description": "set true if you want to consider spot instance params",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "priority": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Possible values include: 'Regular', 'Low', 'Spot'",
           "default": "Spot"
         },
         "eviction_policy": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "the only supported value is 'Deallocate'",
           "default": "Deallocate"
         },
@@ -1492,21 +1492,21 @@
       "description": "See https://msdn.microsoft.com/en-us/library/mt163574.aspx",
       "properties": {
         "protocol": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "default": "Tcp"
         },
         "port": {
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "requestPath": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "intervalInSeconds": {
-          "type": "integer",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
           "default": 5
         },
         "numberOfProbes": {
-          "type": "integer",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
           "default": 16
         }
       },
@@ -1517,14 +1517,14 @@
       "description": "See https://msdn.microsoft.com/en-us/library/mt163574.aspx",
       "properties": {
         "protocol": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "default": "Tcp"
         },
         "frontendPort": {
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "backendPort": {
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         }
       },
       "required": ["protocol", "frontendPort", "backendPort"]
@@ -1534,25 +1534,25 @@
       "description": "See https://msdn.microsoft.com/en-us/library/mt163574.aspx",
       "properties": {
         "protocol": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "default": "Tcp"
         },
         "frontendPort": {
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "backendPort": {
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "enableFloatingIP": {
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "idleTimeoutInMinutes": {
-          "type": "integer",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput",
           "default": 5
         },
         "loadDistribution": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "default": "Default"
         }
       },
@@ -1563,17 +1563,17 @@
       "description": "See https://docs.microsoft.com/en-us/rest/api/aks/managedclusters",
       "properties": {
         "location": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "tags": {
           "description": "A dict containing resource tags",
           "type": "object"
         },
         "kubernetes_version": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "dns_prefix": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "agent_pool_profiles": {
           "description": "An array to pass an array of dict for agent profile",
@@ -1601,8 +1601,26 @@
           "type": "object"
         },
         "enable_rbac": {
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": true
+        }
+      }
+    },
+    "cloudifyDatatypesAzureStorageFileShareConfig": {
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "description": "Metadata (dict) for the File Share",
+          "type": "object"
+        },
+        "quota": {
+          "description": "Quote, in GiB, for the maximum size of the file share",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
+        },
+        "fail_on_exist": {
+          "description": "If true, causes the operation to raise a NonRecoverableError if\nthe file share already exists. If false, issues a warning and\ncontinues execution.",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "default": false
         }
       }
     },
@@ -1610,16 +1628,16 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Resources API Version",
           "default": "2017-05-10"
         },
         "name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name for the resource. Resource group name must be no longer than\n80 characters long. It can contain only alphanumeric characters,\ndash, underscore, opening parenthesis, closing parenthesis,\nand period. The name cannot end with a period."
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -1628,12 +1646,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": "false"
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -1667,20 +1685,20 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description":"Storage API Version",
           "default": "2015-06-15"
         },
         "name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name for the resource. Storage account name must be between\n3 and 24 characters in length and use numbers and lower-case\nletters only."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -1689,7 +1707,7 @@
         },
         "sku": {
           "description": "A Storage account SKU if needed.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "resource_config": {
           "description": "A dictionary of values to pass as properties when creating the resource",
@@ -1697,12 +1715,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": "false"
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This propertynwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -1738,21 +1756,21 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string",
-          "description": "Name for the resource (include any extension, such as .vhd).\nCan be up to 80 characters in length and\ncontain lowercase letters, numbers, \".\", and \"_\". Must start\nwith a number or lowercase letter and cannot end with\neither \"_\" or \".\"",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name for the resource (include any extension, such as .vhd).\nCan be up to 80 characters in length and\ncontain lowercase letters, numbers, \".\", and \"_\". Must start\nwith a number or lowercase letter and cannot end with\neither \"_\" or \".\""
         },
         "location": {
-          "type": "string",
-          "description": "Specifies the supported Azure location for the resource",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Specifies the supported Azure location for the resource"
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "resource_config": {
           "description": "A dictionary of values to pass as properties when creating the resource",
@@ -1791,25 +1809,25 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name for the resource. Can be up to 63 characters in length and\ncontain lowercase letters, numbers, and dashes. Must start\nwith a number or lowercase letter and cannot contain\ntwo consecutive dashes."
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "resource_config": {
           "description": "A dictionary of values to pass as properties when creating the resource",
-          "$ref": "cloudify.datatypes.azure.storage.FileShareConfig"
+          "$ref": "#/definitions/cloudifyDatatypesAzureStorageFileShareConfig"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -1837,20 +1855,20 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -1859,16 +1877,16 @@
         },
         "resource_config": {
           "description": "A dictionary of values to pass as properties when creating the resource",
-          "$ref": "#/definitions/cloudifyDatatypesAzureNetworkVirtualNetworkConfig" "cloudify.datatypes.azure.network.VirtualNetworkConfig"
+          "$ref": "#/definitions/cloudifyDatatypesAzureNetworkVirtualNetworkConfig"
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": "false"
         },
         "retry_after": {
           "description":  "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -1903,20 +1921,20 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
-          "description": "Name for the resource.",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
-          "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -1929,12 +1947,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -1969,25 +1987,25 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "network_security_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Network Security Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Network Security Groupnode)"
         },
         "location": {
-          "type": "string",
-          "description": "Specifies the supported Azure location for the resource",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
           "description":"Specifies a dictionary of one or more name and value pairs that describe a tag",
@@ -1999,12 +2017,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2039,25 +2057,25 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
-          "description": "Name for the resource.",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "virtual_network_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Virtual Network that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Virtual Network node)"
         },
         "location": {
-          "type": "string",
-          "description": "Specifies the supported Azure location for the resource",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
           "description": "Specifies a dictionary of one or more name and value pairs that describe a tag"
@@ -2068,12 +2086,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This propert\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2105,20 +2123,20 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "location:": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -2131,12 +2149,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2171,25 +2189,25 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
-          "description": "Name for the resource.",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
-          "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "route_table_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Network Security Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Virtual Network node)"
         },
         "location": {
-          "type": "string",
-          "description": "Specifies the supported Azure location for the resource",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
           "description": "Specifies a dictionary of one or more name and value pairs that describe a tag",
@@ -2201,12 +2219,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2241,20 +2259,20 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -2271,12 +2289,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2319,20 +2337,20 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -2345,12 +2363,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2367,20 +2385,20 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
-          "description": "Name for the resource.",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -2393,12 +2411,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer",
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2437,20 +2455,20 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Compute API Version",
           "default": "2016-03-30"
         },
         "name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -2463,12 +2481,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2476,7 +2494,7 @@
         },
         "client_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
-          "$ref": "#/definitions/cloudifyDatatypesAzureConfig",
+          "$ref": "#/definitions/cloudifyDatatypesAzureConfig"
         }
       },
       "required": ["resource_config", "use_external_resource"]
@@ -2503,24 +2521,24 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Compute API Version",
           "default": "2016-03-30"
         },
         "name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "use_public_ip": {
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "description": "Tells the deployment to use the public IP (if available) of the resource\nfor Cloudify Agent connections"
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -2533,16 +2551,16 @@
         },
         "resource_config": {
           "description": "A dictionary of values to pass as properties when creating the resource",
-          "$ref": "#/definitions/cloudifyDatatypesAzureComputeVirtualMachineConfig" "cloudify.datatypes.azure.compute.VirtualMachineConfig"
+          "$ref": "#/definitions/cloudifyDatatypesAzureComputeVirtualMachineConfig"
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2550,22 +2568,23 @@
         },
         "client_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
-          "type": "#/definitions/cloudifyDatatypesAzureConfig"
+          "$ref": "#/definitions/cloudifyDatatypesAzureConfig"
         },
         "ip": {
           "description": "Property specifying the IP address of the resource to\nuse for the agent installer.",
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "os_family": {
           "description": "Property specifying what type of operating system family\nthis compute node will run.",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "default": "linux"
         },
         "agent_config": {
           "$ref": "#/definitions/cloudifyDatatypesAgentConfig",
-          "type": "object",
+          "type": "object"
         },
         "storage_endpoint": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "This is the suffix for the storage endpoint. Supported values are core.windows.net or local.azurestack.external.",
           "default": "core.windows.net"
         }
@@ -2589,7 +2608,7 @@
                   "type": "object",
                   "properties": {
                     "command_to_execute": {
-                      "type": "string"
+                      "$ref": "#/definitions/cloudifyStringOrGetInput"
                     },
                     "file_uris": {
                       "type": "array",
@@ -2610,7 +2629,7 @@
         {
           "properties": {
             "os_family": {
-              "type": "string",
+              "$ref": "#/definitions/cloudifyStringOrGetInput",
               "default": "windows"
             },
             "agent_config": {
@@ -2637,7 +2656,7 @@
                   "type": "object",
                   "properties": {
                     "command_to_execute": {
-                      "type": "string"
+                      "$ref": "#/definitions/cloudifyStringOrGetInput"
                     },
                     "file_uris": {
                       "type": "array",
@@ -2655,24 +2674,24 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Compute API Version",
           "default": "2016-03-30"
         },
         "name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "virtual_machine_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Virtual Machine that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Virtual Machine node)"
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -2681,12 +2700,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2734,20 +2753,20 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -2760,12 +2779,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2804,23 +2823,23 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
-          "description": "Name for the resource.",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "load_balancer_name": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -2828,12 +2847,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2868,24 +2887,24 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
-          "description": "Name for the resource.",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "load_balancer_name": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "location": {
-          "type": "string",
-          "description": "Specifies the supported Azure location for the resource",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
           "description": "Specifies a dictionary of one or more name and value pairs that describe a tag",
@@ -2897,12 +2916,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2937,24 +2956,24 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
-          "description": "Name for the resource.",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "load_balancer_name": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "location": {
-          "type": "string",
-          "description": "Specifies the supported Azure location for the resource",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
           "description": "Specifies a dictionary of one or more name and value pairs that describe a tag",
@@ -2966,12 +2985,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -3006,23 +3025,23 @@
       "type": "object",
       "properties": {
         "api_version": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Network API Version",
           "default": "2016-09-01"
         },
         "name": {
-          "type": "string",
-          "description": "Name for the resource.",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name for the resource."
         },
         "resource_group_name": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Name of the Resource Group that the existing resource belongs to\n(this is only useful when not using a relationship between a resource\nnode and a Resource Group node)"
         },
         "load_balancer_name": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "location": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Specifies the supported Azure location for the resource"
         },
         "tags": {
@@ -3035,12 +3054,12 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         },
         "retry_after": {
           "description": "Overrides the Azure-specified \"retry_after\" response. This property\nwill set the number of seconds for each task retry interval (in the\ncase of iteratively checking the status of an asynchronous operation)",
-          "type": "integer"
+          "$ref": "#/definitions/cloudifyIntegerOrGetInput"
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -3075,18 +3094,21 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "location": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "template_file": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Path or URL to template file. Ignored if `template` is specified."
         },
         "template": {
           "description": "Deployment template. Can be either a string (which will be parsed as\nJSON) or a dict (which will be passed as-is to the Azure SDK).",
-          "type":["string", "object"]
+          "anyOf": [
+            {"$ref": "#/definitions/cloudifyStringOrGetInput"},
+            {"type": "object"}
+          ]
         },
         "params": {
           "description": "Deployment params",
@@ -3102,7 +3124,7 @@
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": false
         }
       },
@@ -3130,13 +3152,13 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "resource_group": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "container_service_config": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "Container service config details"
         },
         "azure_config": {
@@ -3165,13 +3187,13 @@
                 },
                 "inputs": {
                   "name": {
-                    "type": "string"
+                    "$ref": "#/definitions/cloudifyStringOrGetInput"
                   },
                   "resource_group": {
-                    "type": "string"
+                    "$ref": "#/definitions/cloudifyStringOrGetInput"
                   },
                   "container_service_config": {
-                    "type": "string"
+                    "$ref": "#/definitions/cloudifyStringOrGetInput"
                   },
                   "azure_config": {
                     "$ref": "#/definitions/cloudifyDatatypesAzureConfig"
@@ -3199,13 +3221,13 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "resource_group": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "sku": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "SKU details, including location, name, capacity and tier"
         },
         "azure_config": {
@@ -3241,13 +3263,13 @@
                   "type": "object",
                   "properties": {
                     "name": {
-                      "type": "string"
+                      "$ref": "#/definitions/cloudifyStringOrGetInput"
                     },
                     "resource_group": {
-                      "type": "string"
+                      "$ref": "#/definitions/cloudifyStringOrGetInput"
                     },
                     "sku": {
-                      "type": "string"
+                      "$ref": "#/definitions/cloudifyStringOrGetInput"
                     },
                     "azure_config": {
                       "$ref": "#/definitions/cloudifyDatatypesAzureConfig"
@@ -3276,13 +3298,13 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "resource_group": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "app_config": {
-          "type": "string",
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
           "description": "App config details, including location and plan"
         },
         "azure_config": {
@@ -3311,13 +3333,13 @@
                 },
                 "inputs": {
                   "name": {
-                    "type": "string"
+                    "$ref": "#/definitions/cloudifyStringOrGetInput"
                   },
                   "resource_group": {
-                    "type": "string"
+                    "$ref": "#/definitions/cloudifyStringOrGetInput"
                   },
                   "app_config": {
-                    "type": "string"
+                    "$ref": "#/definitions/cloudifyStringOrGetInput"
                   },
                   "azure_config": {
                     "$ref": "#/definitions/cloudifyDatatypesAzureConfig"
@@ -3396,17 +3418,17 @@
       "type": "object",
       "properties": {
         "resource_group": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "cluster_name": {
-          "type": "string"
+          "$ref": "#/definitions/cloudifyStringOrGetInput"
         },
         "resource_config": {
           "$ref": "#/definitions/cloudifyDatatypesAzureComputeManagedClusterConfig",
           "description": "Managed Cluster config details, including location, profiles"
         },
         "store_kube_config_in_runtime": {
-          "type": "boolean",
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
           "default": true,
           "description": "it will store the kubernetes configuration into a runtime property ['kubeconf'] to\nuse later to interact with the cluster"
         },
