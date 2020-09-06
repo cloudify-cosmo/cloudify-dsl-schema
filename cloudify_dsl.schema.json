@@ -1624,6 +1624,66 @@
         }
       }
     },
+    "cloudifyDatatypesAzureNetworkLoadBalancerConfig": {
+      "type": "object",
+      "description": "See https://msdn.microsoft.com/en-us/library/mt163574.aspx",
+      "properties": {
+        "frontendIPConfigurations": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "backendAddressPools": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "loadBalancingRules": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "probes": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "inboundNatRules": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "cloudifyDatatypesAzureNetworkRouteConfig": {
+      "type": "object",
+      "description": "See https://msdn.microsoft.com/en-us/library/mt459110.aspx",
+      "properties": {
+        "addressPrefix": {
+          "type": "string"
+        },
+        "nextHopType": {
+          "type": "string"
+        },
+        "nextHopIpAddress": {
+          "type": "string"
+        }
+      },
+      "required": ["nextHopType", "addressPrefix"]
+    },
+    "cloudifyDatatypesAzureNetworkNetworkInterfaceCardConfig": {
+      "type": "object",
+      "description": "See https://msdn.microsoft.com/en-us/library/mt163668.aspx",
+      "properties": {
+        "networkSecurityGroups": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "ipConfigurations": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "dnsSettings": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
     "nodeTypeCloudifyAzureNodesResourceGroupProperties": {
       "type": "object",
       "properties": {
@@ -2215,7 +2275,7 @@
         },
         "resource_config": {
           "description": "A dictionary of values to pass as properties when creating the resource",
-          "$ref": "cloudify.datatypes.azure.network.RouteConfig"
+          "$ref": "#/definitions/cloudifyDatatypesAzureNetworkRouteConfig"
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
@@ -2285,7 +2345,7 @@
         },
         "resource_config": {
           "description": "A dictionary of values to pass as properties when creating the resource",
-          "$ref": "cloudify.datatypes.azure.network.NetworkInterfaceCardConfig"
+          "$ref": "#/definitions/cloudifyDatatypesAzureNetworkNetworkInterfaceCardConfig"
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
@@ -2775,7 +2835,7 @@
         },
         "resource_config": {
           "description": "A dictionary of values to pass as properties when creating the resource",
-          "$ref": "cloudify.datatypes.azure.network.LoadBalancerConfig"
+          "$ref": "#/definitions/cloudifyDatatypesAzureNetworkLoadBalancerConfig"
         },
         "use_external_resource": {
           "description": "Indicate whether the resource exists or if Cloudify should create the resource",
@@ -9852,44 +9912,51 @@
       }
     },
     "nodeTemplateInterfaceAction": {
-      "type": "object",
-      "properties": {
-        "implementation": {
-          "type": "string",
-          "description": "The script or plugin task name to execute."
+      "anyOf": [
+        {
+          "type": "string"
         },
-        "inputs": {
+        {
           "type": "object",
-          "description": "Schema of inputs to be passed to the implementation as kwargs."
-        },
-        "executor": {
-          "type": "string",
-          "description": "Valid values: central_deployment_agent, host_agent. See the Plugins Specification for more info.",
-          "enum": [
-            "central_deployment_agent",
-            "host_agent"
-          ]
-        },
-        "max_retries": {
-          "type":"number",
-          "description": "Maximum number of retries for a task. -1 means infinite retries (Default: task_retries in the Cloudify Manager config.yaml file for remote workflows, and task_retries workflow configuration for local workflows)."
-        },
-        "retry_interval": {
-          "type": "number",
-          "description": "Minimum wait time (in seconds) between task retries (Default: task_retry_interval in the Cloudify Manager config.yaml file for remote workflows and task_retry_interval workflow configuration for local workflows)."
-        },
-        "timeone": {
-          "type": "number",
-          "description": "Number of seconds to wait before the operation is terminated by the orchestrator. A value of 0 (or no value at all, which is the default) means no timeout.",
-          "default": 0
-        },
-        "timeout_recoverable": {
-          "type": "boolean",
-          "description": "If true (the default), and a timeout occured, then, the operation will raise a RecoverableError, resulting in the operation being retried. Otherwise, a NonRecoverableError is raised, ending the execution with a failure.",
-          "default": true
+          "properties": {
+            "implementation": {
+              "type": "string",
+              "description": "The script or plugin task name to execute."
+            },
+            "inputs": {
+              "type": "object",
+              "description": "Schema of inputs to be passed to the implementation as kwargs."
+            },
+            "executor": {
+              "type": "string",
+              "description": "Valid values: central_deployment_agent, host_agent. See the Plugins Specification for more info.",
+              "enum": [
+                "central_deployment_agent",
+                "host_agent"
+              ]
+            },
+            "max_retries": {
+              "type": "number",
+              "description": "Maximum number of retries for a task. -1 means infinite retries (Default: task_retries in the Cloudify Manager config.yaml file for remote workflows, and task_retries workflow configuration for local workflows)."
+            },
+            "retry_interval": {
+              "type": "number",
+              "description": "Minimum wait time (in seconds) between task retries (Default: task_retry_interval in the Cloudify Manager config.yaml file for remote workflows and task_retry_interval workflow configuration for local workflows)."
+            },
+            "timeone": {
+              "type": "number",
+              "description": "Number of seconds to wait before the operation is terminated by the orchestrator. A value of 0 (or no value at all, which is the default) means no timeout.",
+              "default": 0
+            },
+            "timeout_recoverable": {
+              "type": "boolean",
+              "description": "If true (the default), and a timeout occured, then, the operation will raise a RecoverableError, resulting in the operation being retried. Otherwise, a NonRecoverableError is raised, ending the execution with a failure.",
+              "default": true
+            }
+          },
+          "additionalProperties": false
         }
-      },
-      "additionalProperties": false
+      ]
     },
     "nodeTemplateRelationships": {
       "type": "array",
