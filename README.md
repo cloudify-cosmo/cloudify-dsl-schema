@@ -66,7 +66,7 @@ All you need is to save your file that matches the patter `*.cfy.yaml`
 - [x] [cloudifu-aws-plugin (prtially)](https://github.com/cloudify-cosmo/cloudify-aws-plugin)
 - [x] [cloudify-openstack-plugin](https://github.com/cloudify-cosmo/cloudify-openstack-plugin)
 - [x] [cloudify-utilities-plugin](https://github.com/cloudify-incubator/cloudify-utilities-plugin)
-- [ ] [cloudify-azure-plugin](https://github.com/cloudify-cosmo/cloudify-azure-plugin)
+- [x] [cloudify-azure-plugin](https://github.com/cloudify-cosmo/cloudify-azure-plugin)
 - [ ] [cloudify-gcp-plugin](https://github.com/cloudify-cosmo/cloudify-gcp-plugin)
 - [ ] [cloudify-vsphere-plugin](https://github.com/cloudify-cosmo/cloudify-vsphere-plugin)
 - [ ] [tosca-vcloud-plugin](https://github.com/cloudify-cosmo/tosca-vcloud-plugin)
