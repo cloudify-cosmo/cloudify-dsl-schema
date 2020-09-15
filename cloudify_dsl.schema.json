@@ -2155,7 +2155,7 @@
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
-          "$ref": "#/definitions/cloudifyDatatypesAazureConfig"
+          "$ref": "#/definitions/cloudifyDatatypesAzureConfig"
         },
         "client_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2436,7 +2436,7 @@
         },
         "client_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
-          "$ref": "#/definitons/cloudifyDatatypesAzureConfig"
+          "$ref": "#/definitions/cloudifyDatatypesAzureConfig"
         }
       },
       "required": ["resource_config", "use_external_resource"]
@@ -2640,7 +2640,7 @@
           "default": "linux"
         },
         "agent_config": {
-          "$ref": "#/definitions/cloudifyDatatypesAgentConfig",
+          "$ref": "#/definitions/cloudifyDataTypesAgentConfig",
           "type": "object"
         },
         "storage_endpoint": {
@@ -9912,51 +9912,44 @@
       }
     },
     "nodeTemplateInterfaceAction": {
-      "anyOf": [
-        {
-          "type": "string"
+      "type": "object",
+      "properties": {
+        "implementation": {
+          "type": "string",
+          "description": "The script or plugin task name to execute."
         },
-        {
+        "inputs": {
           "type": "object",
-          "properties": {
-            "implementation": {
-              "type": "string",
-              "description": "The script or plugin task name to execute."
-            },
-            "inputs": {
-              "type": "object",
-              "description": "Schema of inputs to be passed to the implementation as kwargs."
-            },
-            "executor": {
-              "type": "string",
-              "description": "Valid values: central_deployment_agent, host_agent. See the Plugins Specification for more info.",
-              "enum": [
-                "central_deployment_agent",
-                "host_agent"
-              ]
-            },
-            "max_retries": {
-              "type": "number",
-              "description": "Maximum number of retries for a task. -1 means infinite retries (Default: task_retries in the Cloudify Manager config.yaml file for remote workflows, and task_retries workflow configuration for local workflows)."
-            },
-            "retry_interval": {
-              "type": "number",
-              "description": "Minimum wait time (in seconds) between task retries (Default: task_retry_interval in the Cloudify Manager config.yaml file for remote workflows and task_retry_interval workflow configuration for local workflows)."
-            },
-            "timeone": {
-              "type": "number",
-              "description": "Number of seconds to wait before the operation is terminated by the orchestrator. A value of 0 (or no value at all, which is the default) means no timeout.",
-              "default": 0
-            },
-            "timeout_recoverable": {
-              "type": "boolean",
-              "description": "If true (the default), and a timeout occured, then, the operation will raise a RecoverableError, resulting in the operation being retried. Otherwise, a NonRecoverableError is raised, ending the execution with a failure.",
-              "default": true
-            }
-          },
-          "additionalProperties": false
+          "description": "Schema of inputs to be passed to the implementation as kwargs."
+        },
+        "executor": {
+          "type": "string",
+          "description": "Valid values: central_deployment_agent, host_agent. See the Plugins Specification for more info.",
+          "enum": [
+            "central_deployment_agent",
+            "host_agent"
+          ]
+        },
+        "max_retries": {
+          "type":"number",
+          "description": "Maximum number of retries for a task. -1 means infinite retries (Default: task_retries in the Cloudify Manager config.yaml file for remote workflows, and task_retries workflow configuration for local workflows)."
+        },
+        "retry_interval": {
+          "type": "number",
+          "description": "Minimum wait time (in seconds) between task retries (Default: task_retry_interval in the Cloudify Manager config.yaml file for remote workflows and task_retry_interval workflow configuration for local workflows)."
+        },
+        "timeone": {
+          "type": "number",
+          "description": "Number of seconds to wait before the operation is terminated by the orchestrator. A value of 0 (or no value at all, which is the default) means no timeout.",
+          "default": 0
+        },
+        "timeout_recoverable": {
+          "type": "boolean",
+          "description": "If true (the default), and a timeout occured, then, the operation will raise a RecoverableError, resulting in the operation being retried. Otherwise, a NonRecoverableError is raised, ending the execution with a failure.",
+          "default": true
         }
-      ]
+      },
+      "additionalProperties": false
     },
     "nodeTemplateRelationships": {
       "type": "array",
