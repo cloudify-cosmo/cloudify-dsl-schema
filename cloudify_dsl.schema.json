@@ -1197,10 +1197,265 @@
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeManagedClusterProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeManagedClusterInterfaces"}
           }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.gcp.project" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeCloudifyGCPProjectProperties"},
+            "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyGCPProjectInterfaces"}
+          }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.gcp.nodes.Instance" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeCloudifyGCPNodesInstanceProperties"},
+            "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyGCPNodesInstanceInterfaces"}
+          }}
         }
+
       ],
       "required": ["type"],
       "additionalProperties": false
+    },
+    "gcpExternalResource": {
+      "type": "object",
+      "properties": {
+        "use_external_resource": {
+          "type": "boolean",
+          "description": "Indicate whether the resource exists or if Cloudify should create the resource,\ntrue if you are bringing an existing resource, false if you want cloudify to create it.",
+          "default": false
+        }
+      }
+    },
+    "gcpResourceId": {
+      "type": "object",
+      "properties": {
+        "resource_id": {
+          "type": "string",
+          "description": "The GCP resource ID of the external resource, if\nuse_external_resource is true. Otherwise it is an empty string."
+        }
+      }
+    },
+    "nodeTypeCloudifyGCPProjectProperties": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/definitions/gcpExternalResource"},
+        { "$ref": "#/definitions/gcpResourceId"},
+        {
+          "properties": {
+            "gcp_config": {
+              "type": "object",
+              "description": "A dictionary of values to pass to authenticate with the GCP API."
+            },
+            "name": {
+              "type": "string",
+              "description": "Optional project name. By default it will be instance id."
+            }
+          }
+        }
+      ]
+    },
+    "nodeTypeCloudifyGCPProjectInterfaces": {
+      "type": "object",
+      "properties": {
+        "cloudify.interfaces.lifecycle": {
+          "type": "object",
+          "properties": {
+            "create": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["gcp_plugin.cloudify_gcp.admin.projects.create"]
+                }
+              }
+            },
+            "delete": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["gcp_plugin.cloudify_gcp.admin.projects.delete"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nodeTypeCloudifyGCPNodesInstanceProperties": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/definitions/gcpExternalResource"},
+        { "$ref": "#/definitions/gcpResourceId"},
+        {
+          "properties": {
+            "gcp_config": {
+              "type": "object",
+              "description": "A dictionary of values to pass to authenticate with the GCP API."
+            },
+            "use_public_ip": {
+              "type": "boolean",
+              "description": "Tells the deployment to use the public IP (if available) of the resource\nfor Cloudify Agent connections",
+              "default": false
+            },
+            "image_id": {
+              "type": "string",
+              "description": "The ID of the image in your GCP account."
+            },
+            "instance_type": {
+              "type": "string",
+              "description": "The instance's type. All available instance types can be found here:\nhttps://cloud.google.com/compute/docs/machine-types",
+              "default": "n1-standard-1"
+            },
+            "name": {
+              "description": "Optional instance name. By default it will be instance id.",
+              "type": "string"
+            },
+            "zone": {
+              "description": "Optional zone name. If not given, this instance will be deployed\bin default zone.",
+              "type": "string"
+            },
+            "tags": {
+              "description": "Optional tags. If not given, this instance will have a tag only with\nits name.",
+              "type": "string"
+            },
+            "block_project_ssh_keys": {
+              "description": " Disable project-wide ssh keys for this Instance",
+              "type": "boolean",
+              "default": false
+            },
+            "can_ip_forward": {
+              "description": "Is the VM allowed to send packets with source address different to its own?",
+              "type": "boolean",
+              "default": false
+            },
+            "scopes": {
+              "description": "Optional scopes. If not will set by default:\n'https://www.googleapis.com/auth/devstorage.read_write',\n'https://www.googleapis.com/auth/logging.write'",
+              "type": "array",
+              "items": { "type": "string"}
+            },
+            "startup_script": {
+              "description": "A script which will be run when the Instance is first started\nexample:\n  type: string\n  script: |\n    yum install some stuff\n    systemctl start it\nor:\n  type: file\n  script: <path to script file>",
+              "type": "string"
+            },
+            "external_ip": {
+              "description": "Should the Instance be created with an externally-accessible\nIP address. This will be an ephemeral IP.\nIf you would like to use an IP address which can be transferred\nto another Instance then connect this Instance to an `Address`\nnode using the\n`cloudify.gcp.relationships.instance_connected_to_ip`\nrelationship.",
+              "type": "boolean",
+              "default": false
+            },
+            "additional_settings": {
+              "description": "Additional instance settings.",
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    "nodeTypeCloudifyGCPNodesInstanceInterfaces": {
+      "type": "object",
+      "properties": {
+        "cloudify.interfaces.lifecycle": {
+          "type": "object",
+          "properties": {
+            "configure": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["gcp_plugin.cloudify_gcp.compute.instance.create"]
+                },
+                "inputs": {
+                  "type": "object",
+                  "properties": {
+                    "startup_script": {
+                      "type": "string",
+                      "default": { "get_property": ["SELF", "startup_script"]}
+                    },
+                    "external_ip": {
+                      "type": "boolean",
+                      "default": { "get_property": ["SELF", "external_ip"]}
+                    },
+                    "instance_type": {
+                      "type": "string",
+                      "default": { "get_property": ["SELF", "instance_type"]}
+                    },
+                    "image_id": {
+                      "type": "string",
+                      "default": { "get_property": ["SELF", "image_id"]}
+                    },
+                    "name": {
+                      "type": "string",
+                      "default": { "get_property": ["SELF", "name"]}
+                    },
+                    "zone": {
+                      "type": "string",
+                      "default": { "get_property": ["SELF", "zone"]}
+                    },
+                    "scopes": {
+                      "type": "array",
+                      "items": {"type": "string"},
+                      "default": { "get_property": ["SELF", "scopes"] }
+                    },
+                    "tags": {
+                      "type": "string",,
+                      "default": { "get_property": ["SELF", "tags"]}
+                    },
+                    "can_ip_forward": {
+                      "type": "boolean",
+                      "default": { "get_property": ["SELF", "can_ip_forward"]}
+                    },
+                    "additional_settings": {
+                      "type": "object",
+                      "default": { "get_property": ["SELF", "additional_settings"]}
+                    }
+                  }
+                }
+              }
+            },
+            "start": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["gcp_plugin.cloudify_gcp.compute.instance.start"]
+                },
+                "inputs": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "default": { "get_attribute": ["SELF", "name"]}
+                    }
+                  }
+                }
+              }
+            },
+            "delete": {
+              "type": "object",
+              "properties": {
+                "implementation": {
+                  "type": "string",
+                  "enum": ["gcp_plugin.cloudify_gcp.compute.instance.delete"]
+                },
+                "inputs": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "default": { "get_attribute": ["SELF", "name"] }
+                    },
+                    "zone": {
+                      "type": "string",
+                      "default": { "get_attribute": ["SELF", "zone"]}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "cloudifyDatatypesAzureConfig": {
       "type":"object",
@@ -2155,7 +2410,7 @@
         },
         "azure_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
-          "$ref": "#/definitions/cloudifyDatatypesAazureConfig"
+          "$ref": "#/definitions/cloudifyDatatypesAzureConfig"
         },
         "client_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
@@ -2436,7 +2691,7 @@
         },
         "client_config": {
           "description": "A dictionary of values to pass to authenticate with the Azure API",
-          "$ref": "#/definitons/cloudifyDatatypesAzureConfig"
+          "$ref": "#/definitions/cloudifyDatatypesAzureConfig"
         }
       },
       "required": ["resource_config", "use_external_resource"]
@@ -2640,7 +2895,7 @@
           "default": "linux"
         },
         "agent_config": {
-          "$ref": "#/definitions/cloudifyDatatypesAgentConfig",
+          "$ref": "#/definitions/cloudifyDataTypesAgentConfig",
           "type": "object"
         },
         "storage_endpoint": {
@@ -9912,51 +10167,44 @@
       }
     },
     "nodeTemplateInterfaceAction": {
-      "anyOf": [
-        {
-          "type": "string"
+      "type": "object",
+      "properties": {
+        "implementation": {
+          "type": "string",
+          "description": "The script or plugin task name to execute."
         },
-        {
+        "inputs": {
           "type": "object",
-          "properties": {
-            "implementation": {
-              "type": "string",
-              "description": "The script or plugin task name to execute."
-            },
-            "inputs": {
-              "type": "object",
-              "description": "Schema of inputs to be passed to the implementation as kwargs."
-            },
-            "executor": {
-              "type": "string",
-              "description": "Valid values: central_deployment_agent, host_agent. See the Plugins Specification for more info.",
-              "enum": [
-                "central_deployment_agent",
-                "host_agent"
-              ]
-            },
-            "max_retries": {
-              "type": "number",
-              "description": "Maximum number of retries for a task. -1 means infinite retries (Default: task_retries in the Cloudify Manager config.yaml file for remote workflows, and task_retries workflow configuration for local workflows)."
-            },
-            "retry_interval": {
-              "type": "number",
-              "description": "Minimum wait time (in seconds) between task retries (Default: task_retry_interval in the Cloudify Manager config.yaml file for remote workflows and task_retry_interval workflow configuration for local workflows)."
-            },
-            "timeone": {
-              "type": "number",
-              "description": "Number of seconds to wait before the operation is terminated by the orchestrator. A value of 0 (or no value at all, which is the default) means no timeout.",
-              "default": 0
-            },
-            "timeout_recoverable": {
-              "type": "boolean",
-              "description": "If true (the default), and a timeout occured, then, the operation will raise a RecoverableError, resulting in the operation being retried. Otherwise, a NonRecoverableError is raised, ending the execution with a failure.",
-              "default": true
-            }
-          },
-          "additionalProperties": false
+          "description": "Schema of inputs to be passed to the implementation as kwargs."
+        },
+        "executor": {
+          "type": "string",
+          "description": "Valid values: central_deployment_agent, host_agent. See the Plugins Specification for more info.",
+          "enum": [
+            "central_deployment_agent",
+            "host_agent"
+          ]
+        },
+        "max_retries": {
+          "type":"number",
+          "description": "Maximum number of retries for a task. -1 means infinite retries (Default: task_retries in the Cloudify Manager config.yaml file for remote workflows, and task_retries workflow configuration for local workflows)."
+        },
+        "retry_interval": {
+          "type": "number",
+          "description": "Minimum wait time (in seconds) between task retries (Default: task_retry_interval in the Cloudify Manager config.yaml file for remote workflows and task_retry_interval workflow configuration for local workflows)."
+        },
+        "timeone": {
+          "type": "number",
+          "description": "Number of seconds to wait before the operation is terminated by the orchestrator. A value of 0 (or no value at all, which is the default) means no timeout.",
+          "default": 0
+        },
+        "timeout_recoverable": {
+          "type": "boolean",
+          "description": "If true (the default), and a timeout occured, then, the operation will raise a RecoverableError, resulting in the operation being retried. Otherwise, a NonRecoverableError is raised, ending the execution with a failure.",
+          "default": true
         }
-      ]
+      },
+      "additionalProperties": false
     },
     "nodeTemplateRelationships": {
       "type": "array",
