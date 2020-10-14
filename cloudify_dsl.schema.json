@@ -1398,7 +1398,7 @@
                       "default": { "get_property": ["SELF", "scopes"] }
                     },
                     "tags": {
-                      "type": "string",,
+                      "type": "string",
                       "default": { "get_property": ["SELF", "tags"]}
                     },
                     "can_ip_forward": {
