@@ -185,7 +185,7 @@
                 "cloudify.nodes.Compute",
                 "cloudify.nodes.Container",
                 "cloudify.nodes.Network",
-                "clouydify.nodes.Subnet",
+                "cloudify.nodes.Subnet",
                 "cloudify.nodes.Router",
                 "cloudify.nodes.Port",
                 "cloudify.nodes.VirtualIP",
@@ -380,7 +380,10 @@
                 "cloudify.gcp.nodes.Logging.Organizatios.exclusions",
                 "cloudify.gcp.nodes.Logging.Projects.exclusions",
                 "cloudify.gcp.nodes.Logging.Projects.metrics",
-                "cloudify.kubernetes.resources.StatefulSet"
+                "cloudify.kubernetes.resources.StatefulSet",
+                "cloudify.nodes.helm.Binary",
+                "cloudify.nodes.helm.Release",
+                "cloudify.nodes.helm.Repo"
               ]
             }
           ]
@@ -1211,8 +1214,13 @@
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyGCPNodesInstanceProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyGCPNodesInstanceInterfaces"}
           }}
+        },
+        {
+          "if": { "properties": { "type": { "const": "cloudify.nodes.helm.Binary" }}},
+          "then": { "properties": {
+            "properties": { "$ref": "#/definitions/nodeTypeHelmBinaryProperties"}
+          }}
         }
-
       ],
       "required": ["type"],
       "additionalProperties": false
@@ -10053,6 +10061,153 @@
         "Tags": { "$ref": "#/definitions/tags" }
       }
     },
+    "cloudifyDatatypesHelmConfig": {
+      "type": "object",
+      "properties": {
+        "executable_path": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Helm binary path.",
+          "default": ""
+        }
+      }
+    },
+    "cloudifyDatatypesHelmConfigurationVariant": {
+      "type": "object",
+      "description": "Type representing all Kubernetes API configuration variants. Each property represents separate supported variant of configuration. For now, until Helm support \"--insecure\" one of \"blueprint_file_name\",\n      \"manager_file_path\" and \"file_content\" must be used.\n      \"api_key\" inputs will override kubeconfig data.",
+      "properties": {
+        "blueprint_file_name": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description":"Name of Kubernetes configuration file attached to blueprint(path)."
+        },
+        "manager_file_path": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description":"Path to Kubernetes configuration file placed on Cloudify Manager VM."
+        },
+        "file_content": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description":"Content (YAML) of Kubernetes configuration file. kubeconfig string or dict are supported. "
+        },
+        "api_options": {
+          "$ref": "#/definitions/cloudifyDatatypesHelmApiOptions",
+          "description": "Set of basic properties describing Kubernetes API access."
+        }
+      }
+    },
+    "cloudifyDatatypesHelmApiOptions": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "HTTP/HTTPS URL to Kubernetes API."
+        },
+        "api_key": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Bearer token used for authentication."
+        }
+      }
+    },
+    "cloudifyDatatypesHelmAuthenticationVariant": {
+      "type": "object",
+      "description": "Type representing all authentication variants.\n for different Kubernetes cloud providers.\n Each property represents separate supported variant of authentication.\n You should choose one variant and fill in only on property.",
+      "properties": {
+        "gcp_service_account": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": " (JSON) Content of Google Cloud Platform Service Account file."
+        }
+      }
+    },
+    "cloudifyDatatypesHelmClientConfig": {
+      "type": "object",
+      "description": "Configuration properties for Helm to interact with kubernetes cluster.\n If kube_config file not provided then kube_token and kube_api_server should provided.",
+      "properties": {
+        "configuration": {
+          "$ref": "#/definitions/cloudifyDatatypesHelmConfigurationVariant"
+        },
+        "authentication":{
+          "$ref": "#/definitions/cloudifyDatatypesHelmAuthenticationVariant"
+        }
+      }
+    },
+    "cloudifyDatatypesHelmReleaseConfig": {
+      "type": "object",
+      "description": "configuration properties for release node type.",
+      "properties": {
+        "name": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name of the created release."
+        },
+        "chart":{
+           "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name of the chart to install.For example: stable/mysql."
+        },
+        "values_file":{
+           "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Path to values files."
+        },
+        "set_values":{
+           "$ref": "#/definitions/cloudifyDatatypesHelmSetFlagsList",
+          "description": " List of variables names and values to set. For example:\n          - name: x\n            value: y\n          - name: a\n            value: b\n          It equals to --set x=y --set a=b in helm command.",
+          "default": []
+        },
+        "flags":{
+           "$ref": "#/definitions/cloudifyDatatypesHelmSetFlagsList",
+          "description": "List of flags add to both \"helm install\" and \"helm uninstall\" commands.\n          For example:\n          - name: namespace\n            value: my_namespace\n          If the flag not requieres value, omit \"value\" and specify only the name as element in the list.",
+          "default": []
+        }
+      },
+      "required": ["name","chart"]
+    },
+    "cloudifyDatatypesHelmRepoConfig": {
+      "type": "object",
+      "description": "configuration properties for repo node type.",
+      "properties": {
+        "name": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Name of the repo that added/removed."
+        },
+        "repo_url":{
+           "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "URL of the repo to add."
+        },
+        "flags":{
+           "$ref": "#/definitions/cloudifyDatatypesHelmSetFlagsList",
+          "description": "List of flags add to both \"helm repo add\" and \"helm repo remove\" commands.",
+          "default": []
+        }
+      },
+      "required": ["name","repo_url"]
+    },
+    "cloudifyDatatypesHelmSetFlagsList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {}
+        }
+      },
+      "default": []
+    },
+    "nodeTypeHelmBinaryProperties": {
+      "type": "object",
+      "properties": {
+        "helm_config": {
+          "$ref": "#/definitions/cloudifyDatatypesHelmConfig"
+        },
+        "use_existing_resource": {
+          "$ref": "#/definitions/cloudifyBooleanOrGetInput",
+          "description": "If true, use an existing helm installation rather than installing it.",
+          "default": false
+        },
+        "installation_source": {
+          "$ref": "#/definitions/cloudifyStringOrGetInput",
+          "description": "Location to download the Helm installation from. Ignored if 'use_existing_resource' is true.",
+          "default": "https://get.helm.sh/helm-v3.3.1-linux-amd64.tar.gz"
+        }
+      }
+    },
     "cloudifyIntegerOrGetInput": {
       "anyOf": [
         {
@@ -10248,15 +10403,15 @@
     "nodeType": {
       "type": "object",
       "properties": {
-        "derived_from": { 
+        "derived_from": {
           "type": "string",
           "description": "A string referencing a parent type."
         },
-        "interfaces": { 
+        "interfaces": {
           "type": "object",
           "description": "A dictionary of node interfaces."
         },
-        "properties": { 
+        "properties": {
           "type":"object",
           "description": "A dictionary of node properties."
         }
