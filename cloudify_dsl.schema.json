@@ -1540,8 +1540,7 @@
           "description": "An alternative cloud environment.",
           "$ref": "#/definitions/cloudifyStringOrGetInput"
         }
-      },
-      "required": ["scale_name_suffix_chars"]
+      }
     },
     "cloudifyDatatypesAzureStorageStorageAccountConfig": {
       "type": "object",
@@ -2069,7 +2068,7 @@
           "$ref": "#/definitions/cloudifyDatatypesAzureConfig"
         }
       },
-      "required": ["resource_config", "use_external_resource"]
+      "required": ["resource_config"]
     },
     "nodeTypeCloudifyAzureNodesStorageStorageAccountInterfaces": {
       "type": "object",
@@ -2641,8 +2640,7 @@
           "description": "A dictionary of values to pass to authenticate with the Azure API",
           "$ref": "#/definitions/cloudifyDatatypesAzureConfig"
         }
-      },
-      "required": ["use_external_resource"]
+      }
     },
     "nodeTypeCloudifyAzureNodesNetworkNetworkInterfaceCardInterfaces": {
       "type": "object",
@@ -2716,7 +2714,7 @@
           "$ref": "#/definitions/cloudifyDatatypesAzureConfig"
         }
       },
-      "required": ["resource_config", "use_external_resource"]
+      "required": ["resource_config"]
     },
     "nodeTypeCloudifyAzureNodesNetworkPublicIPAddressProperties": {
       "type": "object",
@@ -10202,6 +10200,7 @@
           "value": {}
         }
       },
+      "additionalProperties": false,
       "default": []
     },
     "nodeTypeHelmBinaryProperties": {
@@ -10465,7 +10464,7 @@
     "nodeTemplateInterface": {
       "type": "object",
       "properties": {
-        "condifure": { "$ref": "#/definitions/nodeTemplateInterfaceAction" },
+        "configure": { "$ref": "#/definitions/nodeTemplateInterfaceAction" },
         "delete": { "$ref": "#/definitions/nodeTemplateInterfaceAction" }
       },
       "patternProperties": {
@@ -10473,44 +10472,51 @@
       }
     },
     "nodeTemplateInterfaceAction": {
-      "type": "object",
-      "properties": {
-        "implementation": {
-          "type": "string",
-          "description": "The script or plugin task name to execute."
+      "anyOf": [
+        {
+          "type": "string"
         },
-        "inputs": {
+        {
           "type": "object",
-          "description": "Schema of inputs to be passed to the implementation as kwargs."
-        },
-        "executor": {
-          "type": "string",
-          "description": "Valid values: central_deployment_agent, host_agent. See the Plugins Specification for more info.",
-          "enum": [
-            "central_deployment_agent",
-            "host_agent"
-          ]
-        },
-        "max_retries": {
-          "type":"number",
-          "description": "Maximum number of retries for a task. -1 means infinite retries (Default: task_retries in the Cloudify Manager config.yaml file for remote workflows, and task_retries workflow configuration for local workflows)."
-        },
-        "retry_interval": {
-          "type": "number",
-          "description": "Minimum wait time (in seconds) between task retries (Default: task_retry_interval in the Cloudify Manager config.yaml file for remote workflows and task_retry_interval workflow configuration for local workflows)."
-        },
-        "timeone": {
-          "type": "number",
-          "description": "Number of seconds to wait before the operation is terminated by the orchestrator. A value of 0 (or no value at all, which is the default) means no timeout.",
-          "default": 0
-        },
-        "timeout_recoverable": {
-          "type": "boolean",
-          "description": "If true (the default), and a timeout occured, then, the operation will raise a RecoverableError, resulting in the operation being retried. Otherwise, a NonRecoverableError is raised, ending the execution with a failure.",
-          "default": true
+          "properties": {
+            "implementation": {
+              "type": "string",
+              "description": "The script or plugin task name to execute."
+            },
+            "inputs": {
+              "type": "object",
+              "description": "Schema of inputs to be passed to the implementation as kwargs."
+            },
+            "executor": {
+              "type": "string",
+              "description": "Valid values: central_deployment_agent, host_agent. See the Plugins Specification for more info.",
+              "enum": [
+                "central_deployment_agent",
+                "host_agent"
+              ]
+            },
+            "max_retries": {
+              "type": "number",
+              "description": "Maximum number of retries for a task. -1 means infinite retries (Default: task_retries in the Cloudify Manager config.yaml file for remote workflows, and task_retries workflow configuration for local workflows)."
+            },
+            "retry_interval": {
+              "type": "number",
+              "description": "Minimum wait time (in seconds) between task retries (Default: task_retry_interval in the Cloudify Manager config.yaml file for remote workflows and task_retry_interval workflow configuration for local workflows)."
+            },
+            "timeone": {
+              "type": "number",
+              "description": "Number of seconds to wait before the operation is terminated by the orchestrator. A value of 0 (or no value at all, which is the default) means no timeout.",
+              "default": 0
+            },
+            "timeout_recoverable": {
+              "type": "boolean",
+              "description": "If true (the default), and a timeout occured, then, the operation will raise a RecoverableError, resulting in the operation being retried. Otherwise, a NonRecoverableError is raised, ending the execution with a failure.",
+              "default": true
+            }
+          },
+          "additionalProperties": false
         }
-      },
-      "additionalProperties": false
+      ]
     },
     "nodeTemplateRelationships": {
       "type": "array",
@@ -10521,11 +10527,11 @@
       "type": "object",
       "properties": {
         "type": {
-          "type":"string",
+          "type": "string",
           "description": "Either a newly-declared relationship type or one of the relationship types provided by default when importing the types.yaml file."
         },
         "target": {
-          "type":"string",
+          "type": "string",
           "description": "The name of the node to which the current node is related."
         },
         "connection_type": {
@@ -10546,7 +10552,7 @@
       "additionalProperties": false
     },
     "nodeTypes": {
-      "type":"object",
+      "type": "object",
       "patternProperties": {
         "": { "$ref": "#/definitions/nodeType"}
       }
