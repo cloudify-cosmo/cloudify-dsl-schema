@@ -77,7 +77,7 @@ The section explain how to add support for your plugin node types to node templa
 
 It will walk you though on how to add a condition on a node template type property so the properties and interfaces will be corolated to your node type.
 
-Open [cloudify_dsl_schema.json](/cloudify_dsl_schema.json) file.
+Open [cloudify_dsl.schema.json](/cloudify_dsl.schema.json) file.
 
 Add properties and interfaces definitions of your object.
  
