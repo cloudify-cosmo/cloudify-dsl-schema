@@ -61,7 +61,7 @@ All you need is to save your file that matches the patter `*.cfy.yaml`
 ## Supported Plugins
 - [x] [cloudify-docker-plugin](https://github.com/cloudify-cosmo/cloudify-docker-plugin)
 - [x] [cloudify-kubernetes-plugin](https://github.com/cloudify-cosmo/cloudify-kubernetes-plugin)
-- [x] [cloudify-helm-plugin](https://github.com/cloudify-cosmo/cloudify-helm)
+- [x] [cloudify-helm-plugin](https://github.com/cloudify-incubator/cloudify-helm-plugin)
 - [x] [cloudify-ansible-plugin](https://github.com/cloudify-cosmo/cloudify-ansible-plugin)
 - [x] [cloudify-terraform-plugin](https://github.com/cloudify-cosmo/cloudify-terraform-plugin)
 - [x] [cloudifu-aws-plugin (prtially)](https://github.com/cloudify-cosmo/cloudify-aws-plugin)
