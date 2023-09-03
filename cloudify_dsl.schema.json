@@ -10,9 +10,11 @@
         "cloudify_dsl_1_0",
         "cloudify_dsl_1_1",
         "cloudify_dsl_1_2",
-        "cloudify_dsl_1_3"
+        "cloudify_dsl_1_3",
+        "cloudify_dsl_1_4",
+        "cloudify_dsl_1_5"
       ],
-      "default": "cloudify_dsl_1_3"
+      "default": "cloudify_dsl_1_5"
     },
     "imports": {
       "description": "imports enable the author of a blueprint to reuse blueprint files, or parts of them, and to use predefined types (e.g. from the types.yaml file).",
@@ -23,6 +25,8 @@
           {
             "type": "string",
             "enum": [
+              "cloudify/types/types.yaml",
+              "https://cloudify.co/spec/cloudify/6.4.0/types.yaml",
               "http://www.getcloudify.org/spec/cloudify/4.5/types.yaml",
               "plugin:cloudify-ansible-plugin",
               "plugin:cloudify-aws-plugin",
@@ -41,7 +45,7 @@
             ]
           }
         ],
-        "default": "http://www.getcloudify.org/spec/cloudify/4.5/types.yaml"
+        "default": "cloudify/types/types.yaml"
       }
     },
     "data_types": {
@@ -51,13 +55,58 @@
       "description": "inputs are parameters that are injected into a blueprint when a deployment is created. These parameters can be referenced by using the get_input intrinsic function.",
       "type": "object",
       "properties": {
+        "azure_subscription_id": {"$ref": "#/definitions/inputProperty"},
+        "subscription_id": {"$ref": "#/definitions/inputProperty"},
+        "azure_tenant_id": {"$ref": "#/definitions/inputProperty"},
+        "tenant_id": {"$ref": "#/definitions/inputProperty"},
+        "azure_client_id": {"$ref": "#/definitions/inputProperty"},
+        "client_id": {"$ref": "#/definitions/inputProperty"},
+        "azure_client_secret": {"$ref": "#/definitions/inputProperty"},
+        "client_secret": {"$ref": "#/definitions/inputProperty"},
+        "endpoint_resource": {"$ref": "#/definitions/inputProperty"},
+        "endpoints_resource_manager": {"$ref": "#/definitions/inputProperty"},
+        "endpoint_verify": {"$ref": "#/definitions/inputProperty"},
+        "endpoint_storage": {"$ref": "#/definitions/inputProperty"},
+        "endpoints_active_directory": {"$ref": "#/definitions/inputProperty"},
+        "gcp_credentials": {"$ref": "#/definitions/inputProperty"},
         "aws_access_key_id": {"$ref": "#/definitions/inputProperty"},
         "aws_secret_access_key": {"$ref": "#/definitions/inputProperty"},
         "aws_region_name":  {"$ref": "#/definitions/inputProperty"},
         "aws_account_id":  {"$ref": "#/definitions/inputProperty"},
         "aws_region_zone1":  {"$ref": "#/definitions/inputProperty"},
         "aws_region_zone2":  {"$ref": "#/definitions/inputProperty"},
-        "aws_cloudwatch_log_arn":  {"$ref": "#/definitions/inputProperty"}
+        "aws_cloudwatch_log_arn":  {"$ref": "#/definitions/inputProperty"},
+        "flavor":  {"$ref": "#/definitions/inputProperty"},
+        "flavor_name":  {"$ref": "#/definitions/inputProperty"},
+        "image":  {"$ref": "#/definitions/inputProperty"},
+        "image_id":  {"$ref": "#/definitions/inputProperty"},
+        "ami_owner_filter":  {"$ref": "#/definitions/inputProperty"},
+        "ami_name_filter":  {"$ref": "#/definitions/inputProperty"},
+        "catalog":  {"$ref": "#/definitions/inputProperty"},
+        "template":  {"$ref": "#/definitions/inputProperty"},
+        "template_name":  {"$ref": "#/definitions/inputProperty"},
+        "instance_type":  {"$ref": "#/definitions/inputProperty"},
+        "size":  {"$ref": "#/definitions/inputProperty"},
+        "location":  {"$ref": "#/definitions/inputProperty"},
+        "availability_zone":  {"$ref": "#/definitions/inputProperty"},
+        "availability_zone1":  {"$ref": "#/definitions/inputProperty"},
+        "availability_zone2":  {"$ref": "#/definitions/inputProperty"},
+        "availability_zone_1":  {"$ref": "#/definitions/inputProperty"},
+        "availability_zone_2":  {"$ref": "#/definitions/inputProperty"},
+        "region":  {"$ref": "#/definitions/inputProperty"},
+        "zone":  {"$ref": "#/definitions/inputProperty"},
+        "resource_prefix":  {"$ref": "#/definitions/inputProperty"},
+        "resource_suffix":  {"$ref": "#/definitions/inputProperty"},
+        "external_network_name":  {"$ref": "#/definitions/inputProperty"},
+        "resource_group_name":  {"$ref": "#/definitions/inputProperty"},
+        "network_name":  {"$ref": "#/definitions/inputProperty"},
+        "subnet_name":  {"$ref": "#/definitions/inputProperty"},
+        "port":  {"$ref": "#/definitions/inputProperty"},
+        "webserver_port":  {"$ref": "#/definitions/inputProperty"},
+        "vpc_cidr":  {"$ref": "#/definitions/inputProperty"},
+        "subnet_cidr":  {"$ref": "#/definitions/inputProperty"},
+        "infra_name":  {"$ref": "#/definitions/inputProperty"},
+        "env_name":  {"$ref": "#/definitions/inputProperty"}
       },
       "patternProperties": {
         "": { "$ref": "#/definitions/inputProperty"}
@@ -109,7 +158,27 @@
           "description": "The required data type of the input. Not specifying a data type means the type can be anything, including a list, an array or a dictionary. Valid types: string, integer, float, boolean, list, dict, regex or a custom data type.",
           "anyOf": [
             { "type": "string" },
-            { "type": "string", "enum": ["string", "integer", "float", "boolean", "list", "dict", "regex"] }
+            { "type": "string",
+              "enum": [
+                "string",
+                "integer",
+                "float",
+                "boolean",
+                "list",
+                "dict",
+                "regex",
+                "textarea",
+                "blueprint_id",
+                "deployment_id",
+                "secret_key",
+                "capability_value",
+                "scaling_group",
+                "node_id",
+                "node_type",
+                "node_instance",
+                "operation_name"
+              ]
+            }
           ]
         },
         "default": {
@@ -119,12 +188,42 @@
         "constraints": {
           "$ref": "#/definitions/inputPropertyConstraints"
         },
+        "item_type": {
+          "$ref": "#/definitions/inputPropertyItemType"
+        },
+        "display_label": {
+          "$ref": "#/definitions/inputPropertyDisplayLabel"
+        },
         "required": {
           "description": "a boolean value to indicate whether the input is required must be passed or not.",
           "type": "boolean"
         }
       },
       "additionalProperties": false
+    },
+    "inputPropertyDisplayLabel": {
+      "description": "An alternative name for the input that will be displayed in the UI.",
+      "type": "string"
+    },
+    "inputPropertyItemType": {
+      "description": "Definition of items’ type, only valid for list type, if none is provided the items’ type can be anything. Available in cloudify_dsl_1_4 and above.",
+      "anyOf": [
+        { "type": "string" },
+        { "type": "string",
+          "enum": [
+            "string",
+            "blueprint_id",
+            "deployment_id",
+            "secret_key",
+            "capability_value",
+            "scaling_group",
+            "node_id",
+            "node_type",
+            "node_instance",
+            "operation_name"
+          ]
+        }
+      ]
     },
     "inputPropertyConstraints": {
       "description": "The constraints the input value must comply with. Read more details about the format and usage of the constraints in the Constraints section below.",
@@ -203,187 +302,330 @@
                 "cloudify.nodes.Component",
                 "cloudify.nodes.ServiceComponent",
                 "cloudify.nodes.SharedResource",
+                "cloudify.nodes.CloudInit.CloudConfig",
+                "cloudify.nodes.ConfigurationLoader",
+                "cloudify.nodes.DeploymentProxy",
+                "cloudify.nodes.File",
+                "cloudify.nodes.NodeInstanceProxy",
+                "cloudify.nodes.SpotOcean.cluster",
+                "cloudify.nodes.ansible.Ansible",
+                "cloudify.nodes.ansible.Executor",
+                "cloudify.nodes.ansible.Playbook",
+                "cloudify.nodes.aws.CloudFormation.Stack",
+                "cloudify.nodes.aws.SNS.Subscription",
+                "cloudify.nodes.aws.SNS.Topic",
+                "cloudify.nodes.aws.SQS.Queue",
+                "cloudify.nodes.aws.autoscaling.Group",
+                "cloudify.nodes.aws.autoscaling.LaunchConfiguration",
+                "cloudify.nodes.aws.autoscaling.LifecycleHook",
+                "cloudify.nodes.aws.autoscaling.NotificationConfiguration",
+                "cloudify.nodes.aws.autoscaling.Policy",
+                "cloudify.nodes.aws.cloudwatch.Alarm",
+                "cloudify.nodes.aws.cloudwatch.Event",
+                "cloudify.nodes.aws.cloudwatch.Rule",
+                "cloudify.nodes.aws.cloudwatch.Target",
+                "cloudify.nodes.aws.codepipeline.Pipeline",
+                "cloudify.nodes.aws.cognito.IdentityPool",
+                "cloudify.nodes.aws.cognitoidp.IdentityProvider",
+                "cloudify.nodes.aws.cognitoidp.UserPool",
+                "cloudify.nodes.aws.cognitoidp.UserPoolClient",
                 "cloudify.nodes.aws.dynamodb.Table",
-                "cloudify.nodes.aws.iam.Group",
+                "cloudify.nodes.aws.ec2.BaseType",
+                "cloudify.nodes.aws.ec2.CustomerGateway",
+                "cloudify.nodes.aws.ec2.DHCPOptions",
+                "cloudify.nodes.aws.ec2.EBSAttachment",
+                "cloudify.nodes.aws.ec2.EBSVolume",
+                "cloudify.nodes.aws.ec2.ElasticIP",
+                "cloudify.nodes.aws.ec2.Image",
+                "cloudify.nodes.aws.ec2.Instances",
+                "cloudify.nodes.aws.ec2.Interface",
+                "cloudify.nodes.aws.ec2.InternetGateway",
+                "cloudify.nodes.aws.ec2.Keypair",
+                "cloudify.nodes.aws.ec2.NATGateway",
+                "cloudify.nodes.aws.ec2.NetworkACL",
+                "cloudify.nodes.aws.ec2.NetworkAclEntry",
+                "cloudify.nodes.aws.ec2.Route",
+                "cloudify.nodes.aws.ec2.RouteTable",
+                "cloudify.nodes.aws.ec2.SecurityGroup",
+                "cloudify.nodes.aws.ec2.SecurityGroupRuleEgress",
+                "cloudify.nodes.aws.ec2.SecurityGroupRuleIngress",
+                "cloudify.nodes.aws.ec2.SpotFleetRequest",
+                "cloudify.nodes.aws.ec2.SpotInstances",
+                "cloudify.nodes.aws.ec2.Subnet",
+                "cloudify.nodes.aws.ec2.Tags",
+                "cloudify.nodes.aws.ec2.TransitGateway",
+                "cloudify.nodes.aws.ec2.TransitGatewayRoute",
+                "cloudify.nodes.aws.ec2.TransitGatewayRouteTable",
+                "cloudify.nodes.aws.ec2.VPNConnection",
+                "cloudify.nodes.aws.ec2.VPNConnectionRoute",
+                "cloudify.nodes.aws.ec2.VPNGateway",
+                "cloudify.nodes.aws.ec2.Vpc",
+                "cloudify.nodes.aws.ec2.VpcPeering",
+                "cloudify.nodes.aws.ec2.VpcPeeringAcceptRequest",
+                "cloudify.nodes.aws.ec2.VpcPeeringRejectRequest",
+                "cloudify.nodes.aws.ec2.VpcPeeringRequest",
+                "cloudify.nodes.aws.ecs.Cluster",
+                "cloudify.nodes.aws.ecs.Service",
+                "cloudify.nodes.aws.ecs.TaskDefinition",
+                "cloudify.nodes.aws.efs.FileSystem",
+                "cloudify.nodes.aws.efs.FileSystemTags",
+                "cloudify.nodes.aws.efs.MountTarget",
+                "cloudify.nodes.aws.eks.Cluster",
+                "cloudify.nodes.aws.eks.NodeGroup",
+                "cloudify.nodes.aws.elb.Classic.HealthCheck",
+                "cloudify.nodes.aws.elb.Classic.Listener",
+                "cloudify.nodes.aws.elb.Classic.LoadBalancer",
+                "cloudify.nodes.aws.elb.Classic.Policy",
+                "cloudify.nodes.aws.elb.Classic.Policy.Stickiness",
+                "cloudify.nodes.aws.elb.Listener",
+                "cloudify.nodes.aws.elb.LoadBalancer",
+                "cloudify.nodes.aws.elb.Rule",
+                "cloudify.nodes.aws.elb.TargetGroup",
                 "cloudify.nodes.aws.iam.AccessKey",
+                "cloudify.nodes.aws.iam.Group",
+                "cloudify.nodes.aws.iam.InstanceProfile",
                 "cloudify.nodes.aws.iam.LoginProfile",
-                "cloudify.nodes.aws.iam.User",
+                "cloudify.nodes.aws.iam.Policy",
                 "cloudify.nodes.aws.iam.Role",
                 "cloudify.nodes.aws.iam.RolePolicy",
-                "cloudify.nodes.aws.iam.InstanceProfile",
-                "cloudify.nodes.aws.iam.Policy",
+                "cloudify.nodes.aws.iam.User",
+                "cloudify.nodes.aws.kms.Alias",
+                "cloudify.nodes.aws.kms.CustomerMasterKey",
+                "cloudify.nodes.aws.kms.Grant",
                 "cloudify.nodes.aws.lambda.Function",
                 "cloudify.nodes.aws.lambda.Invoke",
                 "cloudify.nodes.aws.lambda.Permission",
                 "cloudify.nodes.aws.rds.Instance",
                 "cloudify.nodes.aws.rds.InstanceReadReplica",
-                "cloudify.nodes.aws.rds.SubnetGroup",
-                "cloudify.nodes.aws.rds.OptionGroup",
                 "cloudify.nodes.aws.rds.Option",
-                "cloudify.nodes.aws.rds.ParameterGroup",
+                "cloudify.nodes.aws.rds.OptionGroup",
                 "cloudify.nodes.aws.rds.Parameter",
+                "cloudify.nodes.aws.rds.ParameterGroup",
+                "cloudify.nodes.aws.rds.SubnetGroup",
                 "cloudify.nodes.aws.route53.HostedZone",
                 "cloudify.nodes.aws.route53.RecordSet",
-                "cloudify.nodes.aws.SQS.Queue",
-                "cloudify.nodes.aws.SNS.Topic",
-                "cloudify.nodes.aws.SNS.Subscription",
-                "cloudify.nodes.aws.elb.LoadBalancer",
-                "cloudify.nodes.aws.elb.Classic.LoadBalancer",
-                "cloudify.nodes.aws.elb.Classic.HealthCheck",
-                "cloudify.nodes.aws.elb.Listener",
-                "cloudify.nodes.aws.elb.Classic.Listener",
-                "cloudify.nodes.aws.elb.Rule",
-                "cloudify.nodes.aws.elb.TargetGroup",
-                "cloudify.nodes.aws.elb.Classic.Policy",
-                "cloudify.nodes.aws.elb.Classic.Policy.Stickiness",
                 "cloudify.nodes.aws.s3.BaseBucket",
                 "cloudify.nodes.aws.s3.BaseBucketObject",
                 "cloudify.nodes.aws.s3.Bucket",
-                "cloudify.nodes.aws.s3.BucketPolicy",
                 "cloudify.nodes.aws.s3.BucketLifecycleConfiguration",
-                "cloudify.nodes.aws.s3.BucketTagging",
                 "cloudify.nodes.aws.s3.BucketObject",
-                "cloudify.nodes.aws.ec2.BaseType",
-                "cloudify.nodes.aws.ec2.Vpc",
-                "cloudify.nodes.aws.ec2.VpcPeering",
-                "cloudify.nodes.aws.ec2.VpcPeeringRequest",
-                "cloudify.nodes.aws.ec2.VpcPeeringAcceptRequest",
-                "cloudify.nodes.aws.ec2.VpcPeeringRejectRequest",
-                "cloudify.nodes.aws.ec2.Subnet",
-                "cloudify.nodes.aws.ec2.SecurityGroup",
-                "cloudify.nodes.aws.ec2.SecurityGroupRuleIngress",
-                "cloudify.nodes.aws.ec2.SecurityGroupRuleEgress",
-                "cloudify.nodes.aws.ec2.NATGateway",
-                "cloudify.nodes.aws.ec2.Interface",
-                "cloudify.nodes.aws.ec2.Instances",
-                "cloudify.nodes.aws.ec2.Keypair",
-                "cloudify.nodes.aws.ec2.ElasticIP",
-                "cloudify.nodes.aws.ec2.NetworkACL",
-                "cloudify.nodes.aws.ec2.NetworkAclEntry",
-                "cloudify.nodes.aws.ec2.DHCPOptions",
-                "cloudify.nodes.aws.ec2.VPNGateway",
-                "cloudify.nodes.aws.ec2.VPNConnection",
-                "cloudify.nodes.aws.ec2.VPNConnectionRoute",
-                "cloudify.nodes.aws.ec2.CustomerGateway",
-                "cloudify.nodes.aws.ec2.InternetGateway",
-                "cloudify.nodes.aws.ec2.RouteTable",
-                "cloudify.nodes.aws.ec2.Route",
-                "cloudify.nodes.aws.ec2.Image",
-                "cloudify.nodes.aws.ec2.Tags",
-                "cloudify.nodes.aws.ec2.EBSVolume",
-                "cloudify.nodes.aws.ec2.EBSAttachment",
-                "cloudify.nodes.aws.autoscaling.Group",
-                "cloudify.nodes.aws.autoscaling.LaunchConfiguration",
-                "cloudify.nodes.aws.autoscaling.Policy",
-                "cloudify.nodes.aws.autoscaling.LifecycleHook",
-                "cloudify.nodes.aws.autoscaling.NotificationConfiguration",
-                "cloudify.nodes.aws.cloudwatch.Alarm",
-                "cloudify.nodes.aws.cloudwatch.Rule",
-                "cloudify.nodes.aws.cloudwatch.Event",
-                "cloudify.nodes.aws.cloudwatch.Target",
-                "cloudify.nodes.aws.efs.FileSystem",
-                "cloudify.nodes.aws.efs.MountTarget",
-                "cloudify.nodes.aws.efs.FileSystemTags",
-                "cloudify.nodes.aws.kms.CustomerMasterKey",
-                "cloudify.nodes.aws.kms.Alias",
-                "cloudify.nodes.aws.kms.Grant",
-                "cloudify.nodes.aws.CloudFormation.Stack",
-                "cloudify.nodes.aws.ecs.Cluster",
-                "cloudify.nodes.aws.ecs.Service",
-                "cloudify.nodes.aws.ecs.TaskDefinition",
-                "cloudify.nodes.swift.s3.Bucket",
-                "cloudify.nodes.swift.s3.BucketObject",
-                "cloudify.nodes.aws.eks.Cluster",
-                "cloudify.nodes.aws.eks.NodeGroup",
-                "cloudify.azure.nodes.storage.StorageAccount",
-                "cloudify.azure.nodes.storage.DataDisk",
-                "cloudify.azure.nodes.storage.FileShare",
-                "cloudify.azure.nodes.network.VirtualNetwork",
-                "cloudify.azure.nodes.network.NetworkSecurityGroup",
-                "cloudify.azure.nodes.network.NetworkSecurityRule",
-                "cloudify.azure.nodes.network.Subnet",
-                "cloudify.azure.nodes.network.RouteTable",
-                "cloudify.azure.nodes.network.Route",
-                "cloudify.azure.nodes.network.NetworkInterfaceCard",
-                "cloudify.azure.nodes.network.IPConfiguration",
-                "cloudify.azure.nodes.network.PublicIPAddress",
-                "cloudify.azure.nodes.compute.AvailabilitySet",
-                "cloudify.azure.nodes.compute.VirtualMachine",
-                "cloudify.azure.nodes.compute.WindowsVirtualMachine",
-                "cloudify.azure.nodes.compute.VirtualMachineExtension",
-                "cloudify.azure.nodes.network.LoadBalancer",
-                "cloudify.azure.nodes.network.LoadBalancer.BackendAddressPool",
-                "cloudify.azure.nodes.network.LoadBalancer.Probe",
-                "cloudify.azure.nodes.network.LoadBalancer.IncomingNATRule",
-                "cloudify.azure.nodes.network.LoadBalancer.Rule",
-                "cloudify.azure.Deployment",
-                "cloudify.azure.nodes.compute.ContainerService",
-                "cloudify.azure.nodes.Plan",
-                "cloudify.azure.nodes.WebApp",
-                "cloudify.azure.nodes.PublishingUser",
-                "cloudify.azure.nodes.compute.ManagedCluster",
-                "cloudify.gcp.project",
-                "cloudify.gcp.nodes.Instance",
-                "cloudify.gcp.nodes.InstanceGroup",
-                "cloudify.gcp.nodes.Volume",
-                "cloudify.gcp.nodes.Snapshot",
-                "cloudify.gcp.nodes.Network",
-                "cloudify.gcp.nodes.SubNetwork",
-                "cloudify.gcp.nodes.VPCNetworkPeering",
-                "cloudify.gcp.nodes.Route",
-                "cloudify.gcp.nodes.FirewallRule",
-                "cloudify.gcp.nodes.SecurityGroup",
-                "cloudify.gcp.nodes.Access",
-                "cloudify.gcp.nodes.KeyPair",
-                "cloudify.gcp.nodes.ExternalIP",
-                "cloudify.gcp.nodes.GlobalAddress",
-                "cloudify.gcp.nodes.StaticIP",
-                "cloudify.gcp.nodes.Address",
-                "cloudify.gcp.nodes.Image",
-                "cloudify.gcp.nodes.HealthCheck",
-                "cloudify.gcp.nodes.BackendService",
-                "cloudify.gcp.nodes.RegionBackendService",
-                "cloudify.gcp.nodes.UrlMap",
-                "cloudify.gcp.nodes.TargetProxy",
-                "cloudify.gcp.nodes.SslCertificate",
-                "cloudify.gcp.nodes.ForwardingRule",
-                "cloudify.gcp.nodes.GlobalForwardingRule",
-                "cloudify.gcp.nodes.DNSZone",
-                "cloudify.gcp.nodes.DNSRecord",
-                "cloudify.gcp.nodes.DNSAAAARecord",
-                "cloudify.gcp.nodes.DNSMXRecord",
-                "cloudify.gcp.nodes.DNSNSRecord",
-                "cloudify.gcp.nodes.DNSTXTRecord",
-                "cloudify.gcp.nodes.KubernetesCluster",
-                "cloudify.gcp.nodes.KubernetesNodePool",
-                "cloudify.gcp.nodes.KubernetesClusterMonitoring",
-                "cloudify.gcp.nodes.KubernetesClusterlegacyAbac",
-                "cloudify.gcp.nodes.KubernetesClusterNetworkPolicy",
-                "cloudify.gcp.nodes.Topic",
-                "cloudify.gcp.nodes.TopicPolicy",
-                "cloudify.gcp.nodes.TopicMessage",
-                "cloudify.gcp.nodes.Subscription",
-                "cloudify.gcp.nodes.SubscriptionPolicy",
-                "cloudify.gcp.nodes.Acknowledge",
-                "cloudify.gcp.nodes.PullRequest",
-                "cloudify.gcp.nodes.StackDriverGroup",
-                "cloudify.gcp.nodes.StackDriverTimeSeries",
-                "cloudify.gcp.nodes.StackDriverUpTimeCheckConfig",
-                "cloudify.gcp.nodes.LoggingSink",
-                "cloudify.gcp.nodes.LoggingExclusion",
-                "cloudify.gcp.nodes.Logging.BillingAccounts.sinks",
-                "cloudify.gcp.nodes.Logging.Folders.sinks",
-                "cloudify.gcp.nodes.Logging.Organizations.sinks",
-                "cloudify.gcp.nodes.Logging.Projects.sinks",
-                "cloudify.gcp.nodes.Logging.BillingAccounts.exclusions",
-                "cloudify.gcp.nodes.Logging.Folders.exclusions",
-                "cloudify.gcp.nodes.Logging.Organizatios.exclusions",
-                "cloudify.gcp.nodes.Logging.Projects.exclusions",
-                "cloudify.gcp.nodes.Logging.Projects.metrics",
-                "cloudify.kubernetes.resources.StatefulSet",
+                "cloudify.nodes.aws.s3.BucketPolicy",
+                "cloudify.nodes.aws.s3.BucketTagging",
+                "cloudify.nodes.azure.CustomTypes",
+                "cloudify.nodes.azure.Plan",
+                "cloudify.nodes.azure.PublishingUser",
+                "cloudify.nodes.azure.ResourceGroup",
+                "cloudify.nodes.azure.WebApp",
+                "cloudify.nodes.azure.compute.AvailabilitySet",
+                "cloudify.nodes.azure.compute.ContainerService",
+                "cloudify.nodes.azure.compute.ManagedCluster",
+                "cloudify.nodes.azure.compute.VirtualMachine",
+                "cloudify.nodes.azure.compute.VirtualMachineExtension",
+                "cloudify.nodes.azure.compute.WindowsVirtualMachine",
+                "cloudify.nodes.azure.network.IPConfiguration",
+                "cloudify.nodes.azure.network.LoadBalancer",
+                "cloudify.nodes.azure.network.LoadBalancer.BackendAddressPool",
+                "cloudify.nodes.azure.network.LoadBalancer.IncomingNATRule",
+                "cloudify.nodes.azure.network.LoadBalancer.Probe",
+                "cloudify.nodes.azure.network.LoadBalancer.Rule",
+                "cloudify.nodes.azure.network.NetworkInterfaceCard",
+                "cloudify.nodes.azure.network.NetworkSecurityGroup",
+                "cloudify.nodes.azure.network.NetworkSecurityRule",
+                "cloudify.nodes.azure.network.PublicIPAddress",
+                "cloudify.nodes.azure.network.Route",
+                "cloudify.nodes.azure.network.RouteTable",
+                "cloudify.nodes.azure.network.Subnet",
+                "cloudify.nodes.azure.network.VirtualNetwork",
+                "cloudify.nodes.azure.resources.Azure",
+                "cloudify.nodes.azure.storage.DataDisk",
+                "cloudify.nodes.azure.storage.FileShare",
+                "cloudify.nodes.azure.storage.StorageAccount",
+                "cloudify.nodes.docker.ansible_playbook",
+                "cloudify.nodes.docker.container",
+                "cloudify.nodes.docker.container_files",
+                "cloudify.nodes.docker.containers",
+                "cloudify.nodes.docker.host",
+                "cloudify.nodes.docker.host_details",
+                "cloudify.nodes.docker.image",
+                "cloudify.nodes.docker.images",
+                "cloudify.nodes.docker.terraform_module",
+                "cloudify.nodes.ftp",
+                "cloudify.nodes.gcp.Access",
+                "cloudify.nodes.gcp.Acknowledge",
+                "cloudify.nodes.gcp.Address",
+                "cloudify.nodes.gcp.BackendService",
+                "cloudify.nodes.gcp.DNSAAAARecord",
+                "cloudify.nodes.gcp.DNSMXRecord",
+                "cloudify.nodes.gcp.DNSNSRecord",
+                "cloudify.nodes.gcp.DNSRecord",
+                "cloudify.nodes.gcp.DNSTXTRecord",
+                "cloudify.nodes.gcp.DNSZone",
+                "cloudify.nodes.gcp.ExternalIP",
+                "cloudify.nodes.gcp.FirewallRule",
+                "cloudify.nodes.gcp.ForwardingRule",
+                "cloudify.nodes.gcp.Gcp",
+                "cloudify.nodes.gcp.GlobalAddress",
+                "cloudify.nodes.gcp.GlobalForwardingRule",
+                "cloudify.nodes.gcp.HealthCheck",
+                "cloudify.nodes.gcp.IAM.Role",
+                "cloudify.nodes.gcp.Image",
+                "cloudify.nodes.gcp.Instance",
+                "cloudify.nodes.gcp.InstanceGroup",
+                "cloudify.nodes.gcp.KeyPair",
+                "cloudify.nodes.gcp.KubernetesCluster", 
+                "cloudify.nodes.gcp.KubernetesClusterMonitoring",
+                "cloudify.nodes.gcp.KubernetesClusterNetworkPolicy",
+                "cloudify.nodes.gcp.KubernetesClusterlegacyAbac",
+                "cloudify.nodes.gcp.KubernetesNodePool",
+                "cloudify.nodes.gcp.Logging.BillingAccounts.exclusions",
+                "cloudify.nodes.gcp.Logging.BillingAccounts.sinks",
+                "cloudify.nodes.gcp.Logging.Folders.exclusions",
+                "cloudify.nodes.gcp.Logging.Folders.sinks",
+                "cloudify.nodes.gcp.Logging.Organizations.exclusions",
+                "cloudify.nodes.gcp.Logging.Organizations.sinks",
+                "cloudify.nodes.gcp.Logging.Organizatios.exclusions",
+                "cloudify.nodes.gcp.Logging.Projects.exclusions",
+                "cloudify.nodes.gcp.Logging.Projects.metrics",
+                "cloudify.nodes.gcp.Logging.Projects.sinks",
+                "cloudify.nodes.gcp.LoggingExclusion",
+                "cloudify.nodes.gcp.LoggingSink",
+                "cloudify.nodes.gcp.Network",
+                "cloudify.nodes.gcp.PolicyBinding",
+                "cloudify.nodes.gcp.Project",
+                "cloudify.nodes.gcp.PullRequest",
+                "cloudify.nodes.gcp.RegionBackendService",
+                "cloudify.nodes.gcp.Route",
+                "cloudify.nodes.gcp.SecurityGroup",
+                "cloudify.nodes.gcp.Snapshot",
+                "cloudify.nodes.gcp.SslCertificate",
+                "cloudify.nodes.gcp.StackDriverGroup",
+                "cloudify.nodes.gcp.StackDriverTimeSeries",
+                "cloudify.nodes.gcp.StackDriverUpTimeCheckConfig",
+                "cloudify.nodes.gcp.StaticIP",
+                "cloudify.nodes.gcp.SubNetwork",
+                "cloudify.nodes.gcp.Subscription",
+                "cloudify.nodes.gcp.SubscriptionPolicy",
+                "cloudify.nodes.gcp.TargetProxy",
+                "cloudify.nodes.gcp.Topic",
+                "cloudify.nodes.gcp.TopicMessage",
+                "cloudify.nodes.gcp.TopicPolicy",
+                "cloudify.nodes.gcp.UrlMap",
+                "cloudify.nodes.gcp.VPCNetworkPeering",
+                "cloudify.nodes.gcp.Volume",
+                "cloudify.nodes.gcp.project",
                 "cloudify.nodes.helm.Binary",
                 "cloudify.nodes.helm.Release",
-                "cloudify.nodes.helm.Repo"
+                "cloudify.nodes.helm.Repo",
+                "cloudify.nodes.keys.RSAKey",
+                "cloudify.nodes.kubernetes.Master",
+                "cloudify.nodes.kubernetes.resources.BlueprintDefinedResource",
+                "cloudify.nodes.kubernetes.resources.ClusterRole",
+                "cloudify.nodes.kubernetes.resources.ClusterRoleBinding",
+                "cloudify.nodes.kubernetes.resources.ConfigMap",
+                "cloudify.nodes.kubernetes.resources.CustomBlueprintDefinedResource",
+                "cloudify.nodes.kubernetes.resources.CustomObject",
+                "cloudify.nodes.kubernetes.resources.CustomResourceDefinition",
+                "cloudify.nodes.kubernetes.resources.DaemonSet",
+                "cloudify.nodes.kubernetes.resources.Deployment",
+                "cloudify.nodes.kubernetes.resources.FileDefinedResource",
+                "cloudify.nodes.kubernetes.resources.Ingress",
+                "cloudify.nodes.kubernetes.resources.MultipleFileDefinedResources",
+                "cloudify.nodes.kubernetes.resources.Namespace",
+                "cloudify.nodes.kubernetes.resources.NetworkPolicy",
+                "cloudify.nodes.kubernetes.resources.Node",
+                "cloudify.nodes.kubernetes.resources.PersistentVolume",
+                "cloudify.nodes.kubernetes.resources.PersistentVolumeClaim",
+                "cloudify.nodes.kubernetes.resources.Pod",
+                "cloudify.nodes.kubernetes.resources.PodSecurityPolicy",
+                "cloudify.nodes.kubernetes.resources.ReplicaSet",
+                "cloudify.nodes.kubernetes.resources.ReplicationController",
+                "cloudify.nodes.kubernetes.resources.ResourceBase",
+                "cloudify.nodes.kubernetes.resources.ResourceWithValidateStatus",
+                "cloudify.nodes.kubernetes.resources.Role",
+                "cloudify.nodes.kubernetes.resources.RoleBinding",
+                "cloudify.nodes.kubernetes.resources.Secret",
+                "cloudify.nodes.kubernetes.resources.Service",
+                "cloudify.nodes.kubernetes.resources.ServiceAccount",
+                "cloudify.nodes.kubernetes.resources.SharedCluster",
+                "cloudify.nodes.kubernetes.resources.StatefulSet",
+                "cloudify.nodes.kubernetes.resources.StorageClass",
+                "cloudify.nodes.openstack.Flavor",
+                "cloudify.nodes.openstack.FloatingIP",
+                "cloudify.nodes.openstack.Group",
+                "cloudify.nodes.openstack.HostAggregate",
+                "cloudify.nodes.openstack.Image",
+                "cloudify.nodes.openstack.KeyPair",
+                "cloudify.nodes.openstack.Network",
+                "cloudify.nodes.openstack.NetworkBase",
+                "cloudify.nodes.openstack.NetworkShare",
+                "cloudify.nodes.openstack.Port",
+                "cloudify.nodes.openstack.Project",
+                "cloudify.nodes.openstack.RBACPolicy",
+                "cloudify.nodes.openstack.RecordSet",
+                "cloudify.nodes.openstack.Role",
+                "cloudify.nodes.openstack.Router",
+                "cloudify.nodes.openstack.SecurityGroup",
+                "cloudify.nodes.openstack.SecurityGroupRule",
+                "cloudify.nodes.openstack.Server",
+                "cloudify.nodes.openstack.ServerGroup",
+                "cloudify.nodes.openstack.SharedFileSystem",
+                "cloudify.nodes.openstack.Subnet",
+                "cloudify.nodes.openstack.User",
+                "cloudify.nodes.openstack.Volume",
+                "cloudify.nodes.openstack.VolumeType",
+                "cloudify.nodes.openstack.WindowsServer",
+                "cloudify.nodes.openstack.Zone",
+                "cloudify.nodes.resources.AmazonWebServices",
+                "cloudify.nodes.resources.List",
+                "cloudify.nodes.resources.ListItem",
+                "cloudify.nodes.rest.BunchRequests",
+                "cloudify.nodes.rest.Requests",
+                "cloudify.nodes.secrets.Reader",
+                "cloudify.nodes.secrets.Writer",
+                "cloudify.nodes.serverless.Binary",
+                "cloudify.nodes.serverless.Service",
+                "cloudify.nodes.starlingx.WRCP",
+                "cloudify.nodes.swift.s3.Bucket",
+                "cloudify.nodes.swift.s3.BucketObject",
+                "cloudify.nodes.terminal.Raw",
+                "cloudify.nodes.terraform",
+                "cloudify.nodes.terraform.Module",
+                "cloudify.nodes.terragrunt",
+                "cloudify.nodes.terragrunt.Stack",
+                "cloudify.nodes.vcloud.DHCPPools",
+                "cloudify.nodes.vcloud.DirectlyConnectedVDCNetwork",
+                "cloudify.nodes.vcloud.Disk",
+                "cloudify.nodes.vcloud.FirewallRules",
+                "cloudify.nodes.vcloud.Gateway",
+                "cloudify.nodes.vcloud.IsolatedVDCNetwork",
+                "cloudify.nodes.vcloud.Media",
+                "cloudify.nodes.vcloud.NIC",
+                "cloudify.nodes.vcloud.NatRules",
+                "cloudify.nodes.vcloud.NetworkBase",
+                "cloudify.nodes.vcloud.RoutedVDCNetwork",
+                "cloudify.nodes.vcloud.StaticRoutes",
+                "cloudify.nodes.vcloud.VApp",
+                "cloudify.nodes.vcloud.VM",
+                "cloudify.nodes.vsphere.CloudInitISO",
+                "cloudify.nodes.vsphere.Cluster",
+                "cloudify.nodes.vsphere.ContentLibraryDeployment",
+                "cloudify.nodes.vsphere.Datacenter",
+                "cloudify.nodes.vsphere.Datastore",
+                "cloudify.nodes.vsphere.Host",
+                "cloudify.nodes.vsphere.IPPool",
+                "cloudify.nodes.vsphere.ISO",
+                "cloudify.nodes.vsphere.NIC",
+                "cloudify.nodes.vsphere.Network",
+                "cloudify.nodes.vsphere.OvfDeployment",
+                "cloudify.nodes.vsphere.PCIDevice",
+                "cloudify.nodes.vsphere.ResourcePool",
+                "cloudify.nodes.vsphere.SCSIController",
+                "cloudify.nodes.vsphere.SerialPort",
+                "cloudify.nodes.vsphere.Server",
+                "cloudify.nodes.vsphere.Storage",
+                "cloudify.nodes.vsphere.USBDevice",
+                "cloudify.nodes.vsphere.VMFolder",
+                "cloudify.nodes.vsphere.WindowsServer"
               ]
             }
           ]
@@ -530,214 +772,214 @@
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.nodes.Master" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.Master" }}},
           "then": { "properties": {
               "properties": { "$ref": "#/definitions/nodeTypeKubernetesNodesMasterProperties"}
           }}
         },
         {
-            "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.ResourceBase" }}},
+            "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.ResourceBase" }}},
             "then": { "properties": {
                 "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesResourceBase"}
             }}
         },
         {
-            "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.ResourceWithValidateStatus" }}},
+            "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.ResourceWithValidateStatus" }}},
             "then": { "properties": {
                 "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesResourceWithValidateStatus"}
             }}
         },
         {
-            "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.BlueprintDefinedResource" }}},
+            "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.BlueprintDefinedResource" }}},
             "then": { "properties": {
                 "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResource"},
                 "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
             }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.ClusterRoleBinding" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.ClusterRoleBinding" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesClusterRoleBindingProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.RoleBinding" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.RoleBinding" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesRoleBinding"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.Role" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.Role" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesRoleProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.ClusterRole" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.ClusterRole" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesClusterRoleProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.Secret" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.Secret" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesSecretProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.ServiceAccount" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.ServiceAccount" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesServiceAccountProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.Deployment" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.Deployment" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesDeploymentProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.Node" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.Node" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesNodeProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.Namespace" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.Namespace" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesNamespaceProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.Pod" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.Pod" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesPodProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.ReplicaSet" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.ReplicaSet" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesReplicaSetProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.ReplicationController" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.ReplicationController" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesReplicationControllerProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.DaemonSet" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.DaemonSet" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesDaemonSetProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.CustomResourceDefinition" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.CustomResourceDefinition" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesCustomResourceDefinitionProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.Service" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.Service" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesServiceProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.PersistentVolume" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.PersistentVolume" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesPersistentVolumeProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.ConfigMap" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.ConfigMap" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesConfigMapProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.StorageClass" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.StorageClass" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesStorageClassProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.StatefulSet" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.StatefulSet" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesStatefulSetProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.PodSecurityPolicy" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.PodSecurityPolicy" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesPodSecurityPolicyProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.NetworkPolicy" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.NetworkPolicy" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesNetworkPolicyroperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.Ingress" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.Ingress" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesIngressProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.PersistentVolumeClaim" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.PersistentVolumeClaim" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesPersistentVolumeClaimProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.CustomBlueprintDefinedResource" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.CustomBlueprintDefinedResource" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesCustomBlueprintDefinedResourceProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesCustomBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.CustomBlueprintDefinedResource" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.CustomBlueprintDefinedResource" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesCustomBlueprintDefinedResourceProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesCustomBlueprintDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.FileDefinedResource" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.FileDefinedResource" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesFileDefinedResourceProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesFileDefinedResourceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.kubernetes.resources.MultipleFileDefinedResources" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.kubernetes.resources.MultipleFileDefinedResources" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeKubernetesResourcesMultipleFileDefinedResourcesProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeKubernetesResourcesMultipleFileDefinedResourcesInterfaces"}
@@ -951,7 +1193,7 @@
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.keys.nodes.RSAKey" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.keys.RSAKey" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyNodesRSAKeyProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyNodesRSAKeyInterfaces"}
@@ -979,14 +1221,14 @@
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.rest.Requests" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.rest.Requests" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyRestRequestsProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyRestRequestsInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.rest.BunchRequests" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.rest.BunchRequests" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyRestBunchRequestsProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyRestBunchRequestsInterfaces"}
@@ -1007,153 +1249,153 @@
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.ResourceGroup" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.ResourceGroup" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesResourceGroupProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesResourceGroupInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.storage.StorageAccount" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.storage.StorageAccount" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesStorageStorageAccountProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesStorageStorageAccountInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.storage.DataDisk" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.storage.DataDisk" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesStorageDataDiskProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesStorageDataDisktInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.storage.FileShare" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.storage.FileShare" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesStorageFileShareProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesStorageFileShareInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.VirtualNetwork" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.VirtualNetwork" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkVirtualNetworkProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkVirtualNetworkInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.NetworkSecurityGroup" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.NetworkSecurityGroup" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkNetworkSecurityGroupProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkNetworkSecurityGroupInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.NetworkSecurityRule" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.NetworkSecurityRule" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkNetworkSecurityRuleProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkNetworkSecurityRuleInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.Subnet" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.Subnet" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkSubnetProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkSubnetInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.RouteTable" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.RouteTable" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkRouteTableProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkRouteTableInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.Route" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.Route" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkRouteProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkRouteInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.NetworkInterfaceCard" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.NetworkInterfaceCard" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkNetworkInterfaceCardProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkNetworkInterfaceCardInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.IPConfiguration" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.IPConfiguration" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkIPConfigurationProperties"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.PublicIPAddress" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.PublicIPAddress" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkPublicIPAddressProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkPublicIPAddressInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.compute.AvailabilitySet" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.compute.AvailabilitySet" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeAvailabilitySetProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeAvailabilitySetInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.compute.VirtualMachine" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.compute.VirtualMachine" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeVirtualMachineProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeVirtualMachineInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.compute.WindowsVirtualMachine" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.compute.WindowsVirtualMachine" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeWindowsVirtualMachineProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeWindowsVirtualMachineInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.compute.VirtualMachineExtension" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.compute.VirtualMachineExtension" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeVirtualMachineExtensionProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeVirtualMachineExtensionInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.LoadBalancer" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.LoadBalancer" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkLoadBalancerProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkLoadBalancerInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.LoadBalancer.BackendAddressPool" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.LoadBalancer.BackendAddressPool" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkLoadBalancerBackendAddressPoolProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkLoadBalancerBackendAddressPoolInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.LoadBalancer.Probe" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.LoadBalancer.Probe" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkLoadBalancerProbeProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkLoadBalancerProbeInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.LoadBalancer.IncomingNATRule" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.LoadBalancer.IncomingNATRule" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkLoadBalancerIncomingNATRuleProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkLoadBalancerIncomingNATRuleInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.network.LoadBalancer.Rule" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.network.LoadBalancer.Rule" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkLoadBalancerRuleProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesNetworkLoadBalancerRuleInterfaces"}
@@ -1167,49 +1409,49 @@
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.compute.ContainerService" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.compute.ContainerService" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeContainerServiceProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeContainerServiceInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.Plan" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.Plan" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesPlanProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesPlanInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.WebApp" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.WebApp" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesWebAppProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesWebAppInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.PublishingUser" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.PublishingUser" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesPublishingUserProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesPublishingUserInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.azure.nodes.compute.ManagedCluster" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.azure.compute.ManagedCluster" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeManagedClusterProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyAzureNodesComputeManagedClusterInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.gcp.project" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.gcp.project" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyGCPProjectProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyGCPProjectInterfaces"}
           }}
         },
         {
-          "if": { "properties": { "type": { "const": "cloudify.gcp.nodes.Instance" }}},
+          "if": { "properties": { "type": { "const": "cloudify.nodes.gcp.Instance" }}},
           "then": { "properties": {
             "properties": { "$ref": "#/definitions/nodeTypeCloudifyGCPNodesInstanceProperties"},
             "interfaces": { "$ref": "#/definitions/nodeTypeCloudifyGCPNodesInstanceInterfaces"}
@@ -8110,7 +8352,7 @@
       },
       "required": [ "kind" ]
     },
-    "kubernetesTypesRoleBindingDefinitio": {
+    "kubernetesTypesRoleBindingDefinition": {
       "description": "Type defining single Kubernetes resource e.g. Pod, Sevice, ...\nIt is some kind of wrapper for native Kubernetes YAML definition",
       "type": "object",
       "allOf": [
@@ -8134,7 +8376,7 @@
         }
       ]
     },
-    "kubernetesTypesRoleDefinitio": {
+    "kubernetesTypesRoleDefinition": {
       "type": "object",
       "description": "Type defining single Kubernetes resource e.g. Role, ...\nIt is some kind of wrapper for native Kubernetes YAML definition",
       "allOf": [
@@ -8152,7 +8394,7 @@
         }
       ]
     },
-    "kubernetesTypesClusterRoleDefinitio": {
+    "kubernetesTypesClusterRoleDefinition": {
       "type": "object",
       "description": "Type defining single Kubernetes resource e.g. ClusterRole, ...\nIt is some kind of wrapper for native Kubernetes YAML definition",
       "allOf": [
@@ -8458,7 +8700,7 @@
           "properties": {
             "definition": {
               "description": "Definition of role binding using native Kubernetes YAML spec",
-              "$ref": "#/definitions/kubernetesTypesRoleBindingDefinitio"
+              "$ref": "#/definitions/kubernetesTypesRoleBindingDefinition"
             }
           }
         }
@@ -8474,7 +8716,7 @@
           "properties": {
             "definition": {
               "description": "Definition of role binding using native Kubernetes YAML spec",
-              "$ref": "#/definitions/kubernetesTypesRoleBindingDefinitio"
+              "$ref": "#/definitions/kubernetesTypesRoleBindingDefinition"
             }
           }
         }
@@ -8490,7 +8732,7 @@
           "properties": {
             "definition": {
               "description": "Definition of role using native Kubernetes YAML spec",
-              "$ref": "#/definitions/kubernetesTypesRoleDefinitio"
+              "$ref": "#/definitions/kubernetesTypesRoleDefinition"
             }
           }
         }
@@ -8507,7 +8749,7 @@
           "properties": {
             "definition": {
               "description": "Definition of role binding using native Kubernetes YAML spec",
-              "$ref": "#/definitions/kubernetesTypesClusterRoleDefinitio"
+              "$ref": "#/definitions/kubernetesTypesClusterRoleDefinition"
             }
           }
         }
