@@ -203,7 +203,7 @@ def process_node_type_result(resp, total, maximum, func):
 
 async def get_node_types():
     total = 0
-    maximum = 10
+    maximum = None
     url = f'{MARKETPLACE_PREFIX}/node-types?offset='
     async with aiohttp.ClientSession() as session:
         while True:
