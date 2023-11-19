@@ -88,6 +88,7 @@ def generate_json_schema(properties):
     return get_chat_response(
         'Limit your response to pure JSON. '
         'Please do not use any escape characters.'
+        'Please do not provide any regex pattern constraints.'
         'Can you generate a JSON schema for the following '
         'properties: {}'.format(properties)
     )
@@ -257,12 +258,12 @@ def update_definitions(new):
 
 if __name__ == '__main__':
     SCHEMA = get_current_schema()
-    # setup_node_types()
-    # setup_node_type_definitions()
-    # asyncio.run(get_node_types())
-    # for k, v in NEW_NODE_TYPE_DEFINITIONS.items():
-    #     update_node_types(v['type'])
-    #     update_node_type_definitions(v['allOf'])
-    #     for definiton in v['definitions']:
-    #         update_definitions(definiton)
+    setup_node_types()
+    setup_node_type_definitions()
+    asyncio.run(get_node_types())
+    for k, v in NEW_NODE_TYPE_DEFINITIONS.items():
+        update_node_types(v['type'])
+        update_node_type_definitions(v['allOf'])
+        for definiton in v['definitions']:
+            update_definitions(definiton)
     put_new_schema()
