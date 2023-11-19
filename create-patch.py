@@ -57,6 +57,14 @@ OPENSTACK_CLIENT_KEYS = {
 }
 
 
+def get_rate_limit():
+    for arg in sys.argv:
+        if arg.startswith('limit='):
+            _, limit = arg.split('limit=')
+            if limit:
+                return int(limit)
+
+
 def get_chat_response(prompt, max_tokens=10000):
     time.sleep(1)
     try:
@@ -67,7 +75,10 @@ def get_chat_response(prompt, max_tokens=10000):
             max_tokens=max_tokens
         )
     except openai.error.RateLimitError as e:
-        waitfor = int(str(e).split('Please retry after ')[1].split(' seconds')[0])
+        try:
+            waitfor = int(str(e).split('Please retry after ')[1].split(' seconds')[0])
+        except ValueError:
+            waitfor = 30
         time.sleep(waitfor)
         return get_chat_response(prompt, max_tokens)
     result = resp.to_dict()['choices'][0].message['content']
@@ -76,7 +87,7 @@ def get_chat_response(prompt, max_tokens=10000):
             result = json.loads(result.split('```')[1].lstrip('json'), cls=LazyDecoder, strict=False, object_pairs_hook=OrderedDict)
         except json.decoder.JSONDecodeError:
             LOGGER.error('Failed here: {}'.format(result))
-            raise
+            return {}
     return result
 
 
@@ -86,9 +97,9 @@ def get_novel_description(node_type):
 
 def generate_json_schema(properties):
     return get_chat_response(
-        'Limit your response to pure JSON. '
-        'Please do not use any escape characters.'
-        'Please do not provide any regex pattern constraints.'
+        'Provide pure JSON. Do not provide any free text.'
+        'Please do not use any double-escape characters.'
+        'Please do not provide any regex pattern/constraints.'
         'Can you generate a JSON schema for the following '
         'properties: {}'.format(properties)
     )
@@ -114,9 +125,10 @@ def generate_ref(key, val):
                 if 'Char ' in str_e:
                     char = int(str_e.split('char ')[-1].strip(')'))
                 LOGGER.error('Failed on this: {}'.format(new_val))
-                raise
+                new_val = {}
         elif not isinstance(new_val, dict):
-            raise Exception('We are getting this junk: {}'.format(new_val))
+            LOGGER.error('We are getting this junk: {}'.format(new_val))
+            return {}
         for i in list(new_val.keys()):
             if i not in val:
                 del new_val[i]
@@ -125,7 +137,8 @@ def generate_ref(key, val):
 
 
 
-def create_properties(properties):
+def create_properties(properties=None):
+    properties = properties or {}
     for key, val in list(properties.items()):
         properties.update(generate_ref(key, val))
     return properties
@@ -203,7 +216,7 @@ def process_node_type_result(resp, total, maximum, func):
 
 async def get_node_types():
     total = 0
-    maximum = None
+    maximum = get_rate_limit()
     url = f'{MARKETPLACE_PREFIX}/node-types?offset='
     async with aiohttp.ClientSession() as session:
         while True:
