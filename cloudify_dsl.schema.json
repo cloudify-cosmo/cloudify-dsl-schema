@@ -4392,6 +4392,38 @@
               }
             }
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "cloudify.nodes.openstack.ServerGroup"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": {
+                "$ref": "#/definitions/nodeTypeOpenstackServergroupProperties"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "cloudify.nodes.aws.iam.AccessKey"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": {
+                "$ref": "#/definitions/nodeTypeAwsIamAccesskeyProperties"
+              }
+            }
+          }
         }
       ],
       "properties": {
@@ -4768,7 +4800,9 @@
                 "cloudify.nodes.vsphere.Storage",
                 "cloudify.nodes.vsphere.USBDevice",
                 "cloudify.nodes.vsphere.VMFolder",
-                "cloudify.nodes.vsphere.WindowsServer"
+                "cloudify.nodes.vsphere.WindowsServer",
+                "cloudify.nodes.openstack.ServerGroup",
+                "cloudify.nodes.aws.iam.AccessKey"
               ],
               "type": "string"
             }
@@ -5527,6 +5561,15 @@
         }
       ],
       "type": "object"
+    },
+    "nodeTypeAwsIamAccesskeyProperties": {
+      "resource_config": {
+        "description": "Configuration key-value data to be passed as-is to the corresponding Boto3 method. Key names must match the case that Boto3 requires.\n",
+        "kwargs": {
+          "default": {},
+          "description": "http://boto3.readthedocs.io/en/latest/reference/services/iam.html#IAM.Client.create_access_key"
+        }
+      }
     },
     "nodeTypeCloudifyAzureDeploymentInterfaces": {
       "properties": {
@@ -12080,6 +12123,130 @@
         }
       ],
       "type": "object"
+    },
+    "nodeTypeOpenstackServergroupProperties": {
+      "client_config": {
+        "auth_url": {
+          "description": "Your OpenStack Client Authorization URL.",
+          "required": false,
+          "type": "string"
+        },
+        "ca_cert": {
+          "description": "Path to CA certificate to validate OpenStack's endpoint with.",
+          "required": false,
+          "type": "string"
+        },
+        "description": "Your OpenStack client configuration.",
+        "insecure": {
+          "default": false,
+          "description": "If true, SSL validation is skipped.",
+          "required": false,
+          "type": "boolean"
+        },
+        "kwargs": {
+          "default": {},
+          "description": "A dictionary of keys and values that is not validated but will override other values in the client config.\n"
+        },
+        "logging": {
+          "description": "Logging configuration.",
+          "groups": {
+            "description": "Assigns logging level to logger groups.",
+            "openstack": {
+              "description": "Default logging level for openstack component.",
+              "required": false,
+              "type": "string"
+            },
+            "required": false
+          },
+          "loggers": {
+            "description": "Assigns logging level to custom loggers (dictionary of string -> logging level).",
+            "required": false
+          },
+          "required": false,
+          "use_cfy_logger": {
+            "default": true,
+            "description": "If true, a logging handler is added, which emits logs to the Cloudify logger.",
+            "type": "boolean"
+          }
+        },
+        "password": {
+          "description": "Your OpenStack password.",
+          "required": false,
+          "type": "string"
+        },
+        "project_domain_id": {
+          "description": "The Project domain id",
+          "required": false,
+          "type": "string"
+        },
+        "project_domain_name": {
+          "description": "Project domain name to operate on.",
+          "required": false,
+          "type": "string"
+        },
+        "project_name": {
+          "description": "The name of your OpenStack project.",
+          "required": false,
+          "type": "string"
+        },
+        "region_name": {
+          "description": "The region where you want this particular resource to be created.",
+          "required": false,
+          "type": "string"
+        },
+        "tenant_name": {
+          "description": "The name of your OpenStack tenant.",
+          "required": false,
+          "type": "string"
+        },
+        "user_domain_id": {
+          "description": "The user domain id",
+          "required": false,
+          "type": "string"
+        },
+        "user_domain_name": {
+          "description": "Domain name to operate on.",
+          "required": false,
+          "type": "string"
+        },
+        "username": {
+          "description": "Your OpenStack username.",
+          "required": false,
+          "type": "string"
+        }
+      },
+      "create_if_missing": {
+        "default": false,
+        "description": "If use_external_resource is ``true`` and the resource is missing,create it instead of failing.",
+        "type": "boolean"
+      },
+      "resource_config": {
+        "description": "https://developer.openstack.org/api-ref/compute/?expanded=create-server-detail#create-server-group",
+        "id": {
+          "description": "Resource id",
+          "required": false,
+          "type": "string"
+        },
+        "kwargs": {
+          "default": {},
+          "description": "A dictionary of keys and values that is not validated but will override other values in the resource config."
+        },
+        "name": {
+          "default": "",
+          "description": "Resource name.",
+          "required": false,
+          "type": "string"
+        },
+        "policies": {
+          "description": "A list of exactly one policy name to associate with the server group. The current valid policy names are: anti-affinity - servers in this group must be scheduled to different hosts. affinity - servers in this group must be scheduled to the same host. soft-anti-affinity - servers in this group should be scheduled to different hosts if possible, but if not possible then they should still be scheduled instead of resulting in a build failure. This policy was added in microversion 2.15. soft-affinity - servers in this group should be scheduled to the same host if possible, but if not possible then they should still be scheduled instead of resulting in a build failure. This policy was added in microversion 2.15.\n",
+          "required": false
+        }
+      },
+      "use_external_resource": {
+        "default": false,
+        "description": "Indicate whether the resource exists or if Cloudify should create the resource, true if you are bringing an existing resource, false if you want cloudify to create it.",
+        "type": "boolean"
+      }
     },
     "nodeTypeOpenstackSubnetInterfaces": {
       "properties": {
