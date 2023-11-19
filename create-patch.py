@@ -8,6 +8,7 @@ import asyncio
 import pathlib
 import logging
 import contextlib
+from collections import OrderedDict
 
 import openai
 
@@ -57,6 +58,7 @@ OPENSTACK_CLIENT_KEYS = {
 
 
 def get_chat_response(prompt, max_tokens=10000):
+    time.sleep(1)
     try:
         resp = openai.ChatCompletion.create(
             engine="gpt35-16k",
@@ -71,7 +73,7 @@ def get_chat_response(prompt, max_tokens=10000):
     result = resp.to_dict()['choices'][0].message['content']
     if '```json' in result:
         try:
-            result = json.loads(result.split('```')[1].lstrip('json'), cls=LazyDecoder, strict=False)
+            result = json.loads(result.split('```')[1].lstrip('json'), cls=LazyDecoder, strict=False, object_pairs_hook=OrderedDict)
         except json.decoder.JSONDecodeError:
             LOGGER.error('Failed here: {}'.format(result))
             raise
@@ -85,6 +87,7 @@ def get_novel_description(node_type):
 def generate_json_schema(properties):
     return get_chat_response(
         'Limit your response to pure JSON. '
+        'Please do not use any escape characters.'
         'Can you generate a JSON schema for the following '
         'properties: {}'.format(properties)
     )
@@ -104,7 +107,7 @@ def generate_ref(key, val):
         new_val = generate_json_schema(val)
         if isinstance(new_val, str):
             try:
-                new_val = json.loads(new_val)
+                new_val = json.loads(new_val, object_pairs_hook=OrderedDict)
             except json.decoder.JSONDecodeError as e:
                 str_e = str(e)
                 if 'Char ' in str_e:
@@ -155,6 +158,11 @@ def get_current_schema(filename: str=SCHEMA_FILENAME) -> dict:
         return json.load(outf)
 
 
+def put_new_schema(filename: str=SCHEMA_FILENAME):
+    with open(f'new_{filename}', 'w') as inf:
+        json.dump(SCHEMA, inf, indent=2, sort_keys=True)
+
+
 def check_if_node_type_in_schema(node):
     node_type = node['type']
     node_name =  camel_case(node_type)
@@ -167,6 +175,7 @@ def check_if_node_type_in_schema(node):
         NEW_NODE_TYPE_DEFINITIONS.update(
             {
                 f'nodeType{node_name}': {
+                    'type': node_type,
                     'allOf': {
                         'if': {
                             'properties': {
@@ -251,15 +260,9 @@ if __name__ == '__main__':
     setup_node_types()
     setup_node_type_definitions()
     asyncio.run(get_node_types())
-    print('We have old Node type Defs:')
-    print(NODE_TYPE_DEFINITIONS)
-    print('We now have new node type defs: ')
-    import pprint
     for k, v in NEW_NODE_TYPE_DEFINITIONS.items():
-        # LOGGER.info(
-        #     f'{k}: {v}'
-        # )
-        update_node_types(k)
+        update_node_types(v['type'])
         update_node_type_definitions(v['allOf'])
         for definiton in v['definitions']:
             update_definitions(definiton)
+    put_new_schema()
